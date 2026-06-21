@@ -25,7 +25,7 @@ export default function Home() {
 
       {/* Hero */}
       <section style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "4rem 2rem" }}>
-        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🇵🇭</div>
+        <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>🌴</div>
         <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)", fontWeight: "900", lineHeight: 1.1, marginBottom: "1.5rem", letterSpacing: "-1px" }}>
           Learn Filipino<br />
           <span style={{ color: "#fbbf24" }}>the way it&apos;s spoken</span>
