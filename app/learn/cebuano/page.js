@@ -2,7 +2,6 @@
 import Link from "next/link";
 
 const AUDIO = {
-  // Greetings
   "Kumusta ka?": "cb_142_kumusta_ka.mp3",
   "Kumusta man mo?": "cb_m032_kumusta_man_mo.mp3",
   "Maayong buntag": "fix_061_maayong_buntag.mp3",
@@ -10,12 +9,11 @@ const AUDIO = {
   "Maayong gabii": "fix_063_maayong_gabii.mp3",
   "Salamat": "cb_146_salamat.mp3",
   "Salamat kaayo": "cb_m036_salamat_kaayo.mp3",
-  "Walay sapayan": "cb_147_walay_sapayan.mp3",
+  "Walay sapayan": "new_cb_expr_001_sige.mp3",
   "Paalam": "cb_147_paalam.mp3",
   "Paalam na": "cb_m037_paalam_na.mp3",
   "Oo": "fix_064_oo.mp3",
   "Dili": "fix_065_dili.mp3",
-  // Numbers
   "Usa": "new_cb_num_001_usa.mp3",
   "Duha": "new_cb_num_002_duha.mp3",
   "Tulo": "new_cb_num_003_tulo.mp3",
@@ -26,7 +24,6 @@ const AUDIO = {
   "Walo": "new_cb_num_008_walo.mp3",
   "Siyam": "new_cb_num_009_siyam.mp3",
   "Napulo": "new_cb_num_010_napulo.mp3",
-  // Family
   "Amahan": "new_cb_fam_001_amahan.mp3",
   "Inahan": "new_cb_fam_002_inahan.mp3",
   "Kuya": "fix_019_kuya.mp3",
@@ -37,7 +34,6 @@ const AUDIO = {
   "Tito": "fix_021_tito.mp3",
   "Tita": "fix_022_tita.mp3",
   "Anak": "new_tl_fam_anak.mp3",
-  // Food
   "Kan-on": "new_cb_food_001_kanon.mp3",
   "Bugas": "new_cb_food_002_bugas.mp3",
   "Tubig": "new_cb_food_003_tubig.mp3",
@@ -48,7 +44,6 @@ const AUDIO = {
   "Itlog": "new_cb_food_006_itlog.mp3",
   "Utanon": "new_cb_food_007_utanon.mp3",
   "Gatas": "new_cb_food_008_gatas.mp3",
-  // Colors
   "Pula": "new_cb_color_001_pula.mp3",
   "Asul": "new_cb_color_002_asul.mp3",
   "Berde": "new_cb_color_003_berde.mp3",
@@ -59,7 +54,6 @@ const AUDIO = {
   "Lila": "new_cb_color_008_lila.mp3",
   "Rosas": "new_cb_color_009_rosas.mp3",
   "Kayumanggi": "new_cb_color_010_kayumanggi.mp3",
-  // Places
   "Merkado": "new_cb_place_001_merkado.mp3",
   "Tindahan": "new_cb_place_002_tindahan.mp3",
   "Ospital": "new_cb_place_003_ospital.mp3",
@@ -69,7 +63,6 @@ const AUDIO = {
   "Parke": "new_cb_place_007_parke.mp3",
   "Balay": "new_cb_place_008_balay.mp3",
   "Karsada": "new_cb_place_009_karsada.mp3",
-  // Expressions
   "Sige": "new_cb_expr_001_sige.mp3",
   "Ayaw problema": "new_cb_expr_002_ayaw_problema.mp3",
   "Wala ko kahibalo": "new_cb_expr_003_wala_ko_kahibalo.mp3",
@@ -77,7 +70,6 @@ const AUDIO = {
   "Gigutom na ko": "new_cb_expr_005_gigutom_na_ko.mp3",
   "Gikapoy na ko": "new_cb_expr_006_gikapoy_na_ko.mp3",
   "Palangga ko ikaw": "new_cb_expr_007_palangga_ko_ikaw.mp3",
-  // Directions
   "Asa ang CR?": "new_cb_dir_001_asa_ang_cr.mp3",
   "Unsaon pagadto sa?": "new_cb_dir_002_unsaon_pagadto_sa.mp3",
   "Liko sa wala": "new_cb_dir_003_liko_sa_wala.mp3",
@@ -85,7 +77,6 @@ const AUDIO = {
   "Diretso lang": "new_cb_dir_005_diretso_lang.mp3",
   "Duol lang": "new_cb_dir_006_duol_lang.mp3",
   "Layo ba?": "new_cb_dir_007_layo_ba.mp3",
-  // Introducing Yourself
   "Ang akong ngalan mao si Maria": "new_cb_adv_001_ang_akong_ngalan.mp3",
   "Gikan ako sa Cebu": "new_cb_adv_002_gikan_ako_sa_cebu.mp3",
   "Nagsabot ko og Cebuano": "new_cb_adv_003_nagsabot_ko_og_cebuano.mp3",
@@ -104,14 +95,14 @@ const LESSONS = {
   basics: [
     { id: "cb-b1", title: "I. Greetings", icon: "👋", hasFormal: true, rows: [
       ["Kumusta ka?","Kumusta man mo?","How are you?"],
-      ["Maayong buntag","Maayong buntag","Good morning"],
-      ["Maayong hapon","Maayong hapon","Good afternoon"],
-      ["Maayong gabii","Maayong gabii","Good evening"],
+      ["Maayong buntag","—","Good morning"],
+      ["Maayong hapon","—","Good afternoon"],
+      ["Maayong gabii","—","Good evening"],
       ["Salamat","Salamat kaayo","Thank you / Thank you very much"],
-      ["Walay sapayan","Walay sapayan","You're welcome"],
+      ["Walay sapayan","—","You're welcome"],
       ["Paalam","Paalam na","Goodbye"],
-      ["Oo","Oo","Yes"],
-      ["Dili","Dili","No"],
+      ["Oo","—","Yes"],
+      ["Dili","—","No"],
     ]},
     { id: "cb-b2", title: "II. Numbers", icon: "🔢", hasFormal: false, rows: [
       ["Usa","One"],["Duha","Two"],["Tulo","Three"],["Upat","Four"],["Lima","Five"],
@@ -209,7 +200,7 @@ export default function CebuanoPage() {
                   <thead>
                     <tr style={{ background: "rgba(255,255,255,0.05)" }}>
                       {lesson.hasFormal
-                        ? <><th style={th}>Singular (ka)</th><th style={th}>Plural / Respectful (mo)</th><th style={th}>English</th></>
+                        ? <><th style={th}>Cebuano</th><th style={th}>Alternate / Intensified</th><th style={th}>English</th></>
                         : <><th style={th}>Cebuano</th><th style={th}>English</th></>
                       }
                     </tr>
@@ -230,7 +221,7 @@ export default function CebuanoPage() {
                             <td style={{ ...td, color: "#86efac" }}>
                               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                 {row[1]}
-                                {AUDIO[row[1]] && (
+                                {row[1] !== "—" && AUDIO[row[1]] && (
                                   <button onClick={() => playAudio(row[1])} style={speakBtn}>🔊</button>
                                 )}
                               </div>
