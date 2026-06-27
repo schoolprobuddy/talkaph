@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
 
 const AUDIO = {
   "Kamusta ka?": "tl_001_kamusta_ka.mp3",
@@ -41,8 +40,6 @@ const AUDIO = {
   "Walo": "tl_069_walo.mp3",
   "Siyam": "tl_070_siyam.mp3",
   "Sampu": "tl_072_sampu.mp3",
-  "Tatay": "tl_083_tatay.mp3",
-  "Nanay": "tl_084_nanay.mp3",
   "Kuya": "tl_085_kuya.mp3",
   "Ate": "tl_086_ate.mp3",
   "Kapatid": "tl_087_kapatid.mp3",
@@ -100,18 +97,13 @@ const AUDIO = {
   "Bangko": "tl_139_bangko.mp3",
   "Parke": "tl_140_parke.mp3",
   "Bahay": "tl_141_bahay.mp3",
-  "Mainit": "fix_094_mainit.mp3",
-  "Malamig": "fix_095_malamig.mp3",
-  "Bagyo": "fix_096_bagyo.mp3",
-  "Ang pangalan ko ay ___": "tl_001_kamusta_ka.mp3",
-  "Nasaan ang banyo?": "fix_097_nasaan_ang_banyo.mp3",
-  "Lumiko sa kaliwa": "fix_098_lumiko_sa_kaliwa.mp3",
-  "Lumiko sa kanan": "fix_099_lumiko_sa_kanan.mp3",
-  "Diretso lang": "fix_100_diretso_lang.mp3",
+  "Masaya akong makilala ka": "tl_039_masaya_akong_makilala_ka.mp3",
+  "Masaya po akong makilala kayo": "tl_040_masaya_po_akong_makilala_kayo.mp3",
   "Sige": "fix_101_sige.mp3",
   "Hindi ko alam": "fix_102_hindi_ko_alam.mp3",
   "Sandali lang": "fix_103_sandali_lang.mp3",
   "Mahal kita": "fix_104_mahal_kita.mp3",
+  "Diretso lang": "fix_100_diretso_lang.mp3",
 };
 
 function playAudio(phrase) {
@@ -180,13 +172,9 @@ const LESSONS = {
   ],
   advanced: [
     { id: "tl-a1", title: "I. Introducing Yourself", icon: "💬", hasFormal: true, rows: [
-      ["Ang pangalan ko ay ___","—","My name is ___"],
       ["Masaya akong makilala ka","Masaya po akong makilala kayo","Nice to meet you"],
     ]},
     { id: "tl-a2", title: "II. Asking Directions", icon: "🗺️", hasFormal: false, rows: [
-      ["Nasaan ang banyo?","Where is the restroom?"],
-      ["Lumiko sa kaliwa","Turn left"],
-      ["Lumiko sa kanan","Turn right"],
       ["Diretso lang","Go straight"],
     ]},
     { id: "tl-a3", title: "III. Everyday Expressions", icon: "🗣️", hasFormal: false, rows: [
@@ -238,26 +226,37 @@ export default function TagalogPage() {
                   <thead>
                     <tr style={{ background: "rgba(255,255,255,0.05)" }}>
                       {lesson.hasFormal
-                        ? <><th style={th}>Informal</th><th style={th}>Formal (po)</th><th style={th}>English</th><th style={th}></th></>
-                        : <><th style={th}>Tagalog</th><th style={th}>English</th><th style={th}></th></>
+                        ? <><th style={th}>Informal</th><th style={th}>Formal (po)</th><th style={th}>English</th></>
+                        : <><th style={th}>Tagalog</th><th style={th}>English</th></>
                       }
                     </tr>
                   </thead>
                   <tbody>
                     {lesson.rows.map((row, i) => (
                       <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                        {row.map((cell, j) => (
-                          <td key={j} style={{ ...td, color: j === 0 ? "#e2e8f0" : j === 1 && lesson.hasFormal ? "#86efac" : "#94a3b8" }}>{cell}</td>
-                        ))}
-                        <td style={{ ...td, width: "48px" }}>
-                          {AUDIO[row[0]] && (
-                            <button onClick={() => playAudio(row[0])} style={{
-                              background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.3)",
-                              borderRadius: "50%", width: "32px", height: "32px", cursor: "pointer",
-                              color: "#fbbf24", fontSize: "14px", display: "flex", alignItems: "center", justifyContent: "center"
-                            }}>🔊</button>
-                          )}
+                        <td style={{ ...td, color: "#e2e8f0" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            {row[0]}
+                            {AUDIO[row[0]] && (
+                              <button onClick={() => playAudio(row[0])} style={speakBtn}>🔊</button>
+                            )}
+                          </div>
                         </td>
+                        {lesson.hasFormal ? (
+                          <>
+                            <td style={{ ...td, color: "#86efac" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                {row[1]}
+                                {AUDIO[row[1]] && (
+                                  <button onClick={() => playAudio(row[1])} style={speakBtn}>🔊</button>
+                                )}
+                              </div>
+                            </td>
+                            <td style={{ ...td, color: "#94a3b8" }}>{row[2]}</td>
+                          </>
+                        ) : (
+                          <td style={{ ...td, color: "#94a3b8" }}>{row[1]}</td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -275,5 +274,6 @@ export default function TagalogPage() {
   );
 }
 
+const speakBtn = { background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.3)", borderRadius: "50%", width: "28px", height: "28px", cursor: "pointer", color: "#fbbf24", fontSize: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 };
 const th = { padding: "0.75rem 1rem", textAlign: "left", color: "#94a3b8", fontWeight: "600", fontSize: "0.8rem", textTransform: "uppercase" };
 const td = { padding: "0.65rem 1rem" };
