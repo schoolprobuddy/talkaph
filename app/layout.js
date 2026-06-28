@@ -12,8 +12,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "talkaPH - Learn Filipino Languages",
-  description: "Learn Tagalog, Cebuano, and Ilonggo with native Filipino audio. Free phrases, vocabulary and pronunciation for travelers and language learners.",
+  title: "talkaPH — Learn Filipino Languages Free | Tagalog, Cebuano, Ilonggo",
+  description: "Learn Tagalog, Cebuano and Ilonggo free with native Filipino audio. 270+ phrases for travelers to the Philippines. Greetings, food, directions and more.",
+  keywords: "learn Filipino, learn Tagalog, learn Cebuano, learn Ilonggo, Filipino language, Philippines travel, Bisaya phrases, Hiligaynon",
+  openGraph: {
+    title: "talkaPH — Learn Filipino Languages Free",
+    description: "Learn Tagalog, Cebuano and Ilonggo with native Filipino audio. Free for travelers to the Philippines.",
+    url: "https://talkaph.com",
+    siteName: "talkaPH",
+  },
 };
 
 export default function RootLayout({ children }) {
