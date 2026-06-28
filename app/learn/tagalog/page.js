@@ -299,6 +299,25 @@ export default function TagalogPage() {
         </section>
       ))}
 
+     {/* Travel Section */}
+      <section style={{ maxWidth: "900px", margin: "0 auto", padding: "1rem 2rem 3rem" }}>
+        <div style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "1.25rem", padding: "2rem" }}>
+          <h2 style={{ color: "#fbbf24", fontWeight: "800", fontSize: "1.1rem", marginBottom: "0.5rem" }}>
+            🌴 Planning a trip to the Philippines?
+          </h2>
+          <p style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1.5rem" }}>
+            Now that you know some Tagalog, put it to use! Book tours, activities and experiences across the Philippines.
+          </p>
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            <a href="https://affiliate.klook.com/redirect?aid=125678&aff_adid=1319478&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Flist%2Fphilippines%2F"
+              target="_blank" rel="noopener noreferrer"
+              style={{ background: "#ff5722", color: "#fff", padding: "0.7rem 1.5rem", borderRadius: "999px", fontWeight: "700", textDecoration: "none", fontSize: "0.9rem" }}>
+              🎯 Find Activities on Klook
+            </a>
+          </div>
+        </div>
+      </section>
+
       <footer style={{ textAlign: "center", padding: "2rem", color: "#334155", fontSize: "0.8rem" }}>
         2026 talkaPH - Learn Filipino languages
       </footer>
