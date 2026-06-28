@@ -376,6 +376,43 @@ export default function TagalogPage() {
           ))}
         </section>
       ))}
+      {/* Contribute Banner */}
+      <section style={{ maxWidth: "900px", margin: "0 auto", padding: "0 2rem 3rem" }}>
+        <div style={{
+          background: "linear-gradient(135deg, rgba(251,191,36,0.08) 0%, rgba(251,191,36,0.03) 100%)",
+          border: "1px solid rgba(251,191,36,0.25)",
+          borderRadius: "1.5rem",
+          padding: "2rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "1.5rem",
+          flexWrap: "wrap",
+        }}>
+          <div style={{ fontSize: "3.5rem", flexShrink: 0 }}>🇵🇭</div>
+          <div style={{ flex: 1, minWidth: "200px" }}>
+            <div style={{ fontWeight: "800", fontSize: "1.1rem", color: "#fbbf24", marginBottom: "0.4rem" }}>
+              Are you a native speaker?
+            </div>
+            <div style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.6 }}>
+              Help talkaPH grow! Submit a missing word, correct a phrase, or share how it sounds in your region. Every contribution keeps Filipino languages alive. 🌺
+            </div>
+          </div>
+          <a href="/contribute" style={{
+            background: "#fbbf24",
+            color: "#0f172a",
+            borderRadius: "999px",
+            padding: "0.7rem 1.5rem",
+            fontWeight: "800",
+            textDecoration: "none",
+            fontSize: "0.9rem",
+            flexShrink: 0,
+            whiteSpace: "nowrap",
+          }}>
+            🎙️ Share your knowledge →
+          </a>
+        </div>
+      </section>
+
       <footer style={{ textAlign: "center", padding: "2rem 1rem", borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "1rem" }}>
         <nav style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1rem" }}>
           <a href="/" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>🏠 Home</a>
