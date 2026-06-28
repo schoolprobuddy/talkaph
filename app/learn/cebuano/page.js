@@ -260,8 +260,14 @@ export default function CebuanoPage() {
         </div>
       </section>
 
-      <footer style={{ textAlign: "center", padding: "2rem", color: "#334155", fontSize: "0.8rem" }}>
-        2026 talkaPH - Learn Filipino languages
+      <footer style={{ textAlign: "center", padding: "2rem 2rem 3rem", borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "1rem" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+          <Link href="/" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>🏠 Home</Link>
+          <Link href="/learn" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>🌐 All Languages</Link>
+          <Link href="/about" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>About</Link>
+          <Link href="/privacy" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>Privacy Policy</Link>
+        </div>
+        <div style={{ color: "#334155", fontSize: "0.8rem" }}>2026 talkaPH - Learn Filipino languages</div>
       </footer>
     </main>
   );
