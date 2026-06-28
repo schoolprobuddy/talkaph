@@ -96,7 +96,7 @@ function playAudio(phrase) {
 
 const LESSONS = {
   basics: [
-    { id: "il-b1", title: "I. Greetings", icon: "👋", hasFormal: true, col2Label: "Plural (kamo)", toggleLabel: "kamo", rows: [
+    { id: "il-b1", title: "I. Greetings", icon: "👋", hasFormal: true, col2Label: "Plural", toggleLabel: "plural", rows: [
       ["Kamusta ka?","Kamusta kamo?","How are you?"],
       ["Maayong aga","Maayong aga sa inyo","Good morning"],
       ["Maayong hapon","Maayong hapon sa inyo","Good afternoon"],
