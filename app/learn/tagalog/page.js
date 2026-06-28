@@ -319,6 +319,10 @@ export default function TagalogPage() {
       </section>
 
       <footer style={{ textAlign: "center", padding: "2rem", color: "#334155", fontSize: "0.8rem" }}>
+        <div style={{ marginBottom: "0.75rem", display: "flex", justifyContent: "center", gap: "1.5rem" }}>
+          <Link href="/about" style={{ color: "#475569", textDecoration: "none" }}>About</Link>
+          <Link href="/privacy" style={{ color: "#475569", textDecoration: "none" }}>Privacy Policy</Link>
+        </div>
         2026 talkaPH - Learn Filipino languages
       </footer>
     </main>
