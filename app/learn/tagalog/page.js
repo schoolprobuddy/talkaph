@@ -238,11 +238,11 @@ function FormalTable({ lesson }) {
       `}</style>
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem", tableLayout: "fixed" }}>
         <colgroup>
-          <col style={{ width: "55%" }} />
+          <col style={{ width: "60%" }} />
           <col className="formal-col" style={{ width: "30%" }} />
-          <col className="po-toggle-col" style={{ width: "20%" }} />
+          <col className="po-toggle-col" style={{ width: "14%" }} />
           <col style={{ width: "45%" }} className="formal-col" />
-          <col style={{ width: "25%" }} className="po-toggle-col" />
+          <col style={{ width: "14%" }} className="po-toggle-col" />
         </colgroup>
         <thead>
           <tr style={{ background: "rgba(255,255,255,0.05)" }}>
