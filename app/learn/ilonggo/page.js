@@ -1,17 +1,118 @@
+"use client";
 import Link from "next/link";
+
+const AUDIO = {
+  // Greetings
+  "Kamusta ka?": "fix_076_kamusta_ka.mp3",
+  "Kamusta kamo?": "fix_077_kamusta_kamo.mp3",
+  "Maayong aga": "fix_078_maayong_aga.mp3",
+  "Maayong aga (kamo)": "fix_079_maayong_aga_kamo.mp3",
+  "Maayong hapon": "fix_080_maayong_hapon.mp3",
+  "Maayong hapon (kamo)": "fix_081_maayong_hapon_kamo.mp3",
+  "Maayong gab-i": "fix_082_maayong_gabi.mp3",
+  "Maayong gab-i (kamo)": "fix_083_maayong_gabi_kamo.mp3",
+  "Salamat": "fix_084_salamat.mp3",
+  "Salamat gid": "fix_085_salamat_gid.mp3",
+  "Paalam": "fix_086_paalam.mp3",
+  "Paalam na": "fix_087_paalam_na.mp3",
+  "Palangga ko ikaw": "new_il_expr_006_palangga_ko_ikaw.mp3",
+  "Oo": "fix_064_oo.mp3",
+  "Indi": "fix_065_dili.mp3",
+  // Numbers
+  "Isa": "new_il_num_001_isa.mp3",
+  "Duha": "new_il_num_002_duha.mp3",
+  "Tatlo": "new_il_num_003_tatlo.mp3",
+  "Apat": "new_il_num_004_apat.mp3",
+  "Lima": "new_il_num_005_lima.mp3",
+  "Anom": "new_il_num_006_anom.mp3",
+  "Pito": "new_il_num_007_pito.mp3",
+  "Walo": "new_il_num_008_walo.mp3",
+  "Siyam": "new_il_num_009_siyam.mp3",
+  "Pulo": "new_il_num_010_pulo.mp3",
+  // Family
+  "Amay": "new_il_fam_001_amay.mp3",
+  "Nanay": "new_il_fam_002_nanay.mp3",
+  "Kuya": "fix_019_kuya.mp3",
+  "Ate": "fix_020_ate.mp3",
+  "Utod": "new_il_fam_005_utod.mp3",
+  "Lolo": "new_il_fam_006_lolo.mp3",
+  "Lola": "new_il_fam_007_lola.mp3",
+  "Tito": "new_il_fam_008_tito.mp3",
+  "Tita": "new_il_fam_009_tita.mp3",
+  "Anak": "new_il_fam_010_anak.mp3",
+  // Food
+  "Kan-on": "new_il_food_001_kanon.mp3",
+  "Bugas": "new_il_food_002_bugas.mp3",
+  "Tubig": "new_il_food_003_tubig.mp3",
+  "Tinapay": "new_il_food_004_tinapay.mp3",
+  "Manok": "new_il_food_005_manok.mp3",
+  "Baboy": "new_il_food_006_baboy.mp3",
+  "Isda": "new_il_food_007_isda.mp3",
+  "Itlog": "new_il_food_008_itlog.mp3",
+  "Utan": "new_il_food_009_utan.mp3",
+  "Gatas": "new_il_food_010_gatas.mp3",
+  // Colors
+  "Pula": "new_il_color_001_pula.mp3",
+  "Asul": "new_il_color_002_asul.mp3",
+  "Berde": "new_il_color_003_berde.mp3",
+  "Dilaw": "new_il_color_004_dilaw.mp3",
+  "Puti": "new_il_color_005_puti.mp3",
+  "Itom": "new_il_color_006_itom.mp3",
+  "Kahel": "new_il_color_007_kahel.mp3",
+  "Lila": "new_il_color_008_lila.mp3",
+  "Rosas": "new_il_color_009_rosas.mp3",
+  "Kayumanggi": "new_il_color_010_kayumanggi.mp3",
+  // Places
+  "Merkado": "new_il_place_001_merkado.mp3",
+  "Tindahan": "new_il_place_002_tindahan.mp3",
+  "Ospital": "new_il_place_003_ospital.mp3",
+  "Eskwelahan": "new_il_place_004_eskwelahan.mp3",
+  "Simbahan": "new_il_place_005_simbahan.mp3",
+  "Banko": "new_il_place_006_banko.mp3",
+  "Parke": "new_il_place_007_parke.mp3",
+  "Balay": "new_il_place_008_balay.mp3",
+  "Dalan": "new_il_place_009_dalan.mp3",
+  // Expressions
+  "Sige": "new_il_expr_001_sige.mp3",
+  "Wala ako kahibalo": "new_il_expr_002_wala_ako_kahibalo.mp3",
+  "Hulat lang": "new_il_expr_003_hulat_lang.mp3",
+  "Ginagutom na ako": "new_il_expr_004_ginagutom_na_ako.mp3",
+  "Ginakapoy na ako": "new_il_expr_005_ginakapoy_na_ako.mp3",
+  "Kamusta na?": "new_il_expr_007_kamusta_na.mp3",
+  // Directions
+  "Diin ang CR?": "new_il_dir_001_diin_ang_cr.mp3",
+  "Paano maabot ang?": "new_il_dir_002_paano_maabot_ang.mp3",
+  "Liko sa wala": "new_il_dir_003_liko_sa_wala.mp3",
+  "Liko sa tuo": "new_il_dir_004_liko_sa_tuo.mp3",
+  "Diretso lang": "new_il_dir_005_diretso_lang.mp3",
+  "Malapit lang": "new_il_dir_006_malapit_lang.mp3",
+  "Malayo bala?": "new_il_dir_007_malayo_bala.mp3",
+  // Introducing Yourself
+  "Ang akon ngalan ay si Ana": "new_il_adv_001_ang_akon_ngalan.mp3",
+  "Taga-Iloilo ako": "new_il_adv_002_taga_iloilo_ako.mp3",
+  "Nalipay ako nga nakilala ta ka": "new_il_adv_003_nalipay_ako.mp3",
+  "Kabalo ko maghambal Ilonggo": "new_il_adv_004_kabalo_ko.mp3",
+  "Ano ang imo ngalan?": "new_il_adv_005_ano_ang_imo_ngalan.mp3",
+};
+
+function playAudio(phrase) {
+  const filename = AUDIO[phrase];
+  if (!filename) return;
+  const audio = new Audio("/" + filename);
+  audio.play();
+}
 
 const LESSONS = {
   basics: [
     { id: "il-b1", title: "I. Greetings", icon: "👋", hasFormal: true, rows: [
       ["Kamusta ka?","Kamusta kamo?","How are you?"],
       ["Maayong aga","Maayong aga (kamo)","Good morning"],
-      ["Maayong hapon","Maayong hapon","Good afternoon"],
+      ["Maayong hapon","Maayong hapon (kamo)","Good afternoon"],
       ["Maayong gab-i","Maayong gab-i (kamo)","Good evening"],
       ["Salamat","Salamat gid","Thank you / Thank you very much"],
-      ["Wala sing sapayan","Wala sing sapayan","You're welcome"],
       ["Paalam","Paalam na","Goodbye"],
-      ["Oo","Oo","Yes"],
-      ["Indi","Indi","No"],
+      ["Oo","—","Yes"],
+      ["Indi","—","No"],
       ["Palangga ko ikaw","—","I love you"],
     ]},
     { id: "il-b2", title: "II. Numbers", icon: "🔢", hasFormal: false, rows: [
@@ -19,7 +120,7 @@ const LESSONS = {
       ["Anom","Six"],["Pito","Seven"],["Walo","Eight"],["Siyam","Nine"],["Pulo","Ten"],
     ]},
     { id: "il-b3", title: "III. Family Members", icon: "👨‍👩‍👧", hasFormal: false, rows: [
-      ["Amay / Tatay","Father"],["Nanay / Iloy","Mother"],["Kuya","Older brother"],
+      ["Amay","Father"],["Nanay","Mother"],["Kuya","Older brother"],
       ["Ate","Older sister"],["Utod","Sibling"],["Lolo","Grandfather"],
       ["Lola","Grandmother"],["Tito","Uncle"],["Tita","Aunt"],["Anak","Child"],
     ]},
@@ -43,12 +144,11 @@ const LESSONS = {
   ],
   advanced: [
     { id: "il-a1", title: "I. Introducing Yourself", icon: "💬", hasFormal: false, rows: [
-      ["Ang akon ngalan ay si ___","My name is ___"],
-      ["Taga-[lugar] ako","I am from [place]"],
+      ["Ang akon ngalan ay si Ana","My name is ___"],
+      ["Taga-Iloilo ako","I am from Iloilo"],
       ["Nalipay ako nga nakilala ta ka","Nice to meet you"],
       ["Kabalo ko maghambal Ilonggo","I speak Ilonggo"],
       ["Ano ang imo ngalan?","What is your name?"],
-      ["Pila ang imo edad?","How old are you?"],
     ]},
     { id: "il-a2", title: "II. Everyday Expressions", icon: "🗣️", hasFormal: false, rows: [
       ["Sige","Okay / Sure"],
@@ -58,11 +158,10 @@ const LESSONS = {
       ["Ginakapoy na ako","I am already tired"],
       ["Palangga ko ikaw","I love you"],
       ["Kamusta na?","How are things?"],
-      ["Kumain ka na?","Have you eaten?"],
     ]},
     { id: "il-a3", title: "III. Asking Directions", icon: "🗺️", hasFormal: false, rows: [
       ["Diin ang CR?","Where is the restroom?"],
-      ["Paano maabot ang ___?","How do I get to ___?"],
+      ["Paano maabot ang?","How do I get to ___?"],
       ["Liko sa wala","Turn left"],
       ["Liko sa tuo","Turn right"],
       ["Diretso lang","Go straight"],
@@ -98,7 +197,7 @@ export default function IlonggoPage() {
 
       {TABS.map(tab => (
         <section key={tab} style={{ padding: "1rem 2rem 2rem", maxWidth: "900px", margin: "0 auto", width: "100%" }}>
-          <h2 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#fbbf24", textTransform: "uppercase", letterSpacing: "2px", marginBottom: "1rem" }}>
+          <h2 style={{ fontSize: "1.1rem", fontWeight: "700", color: "#f59e0b", textTransform: "uppercase", letterSpacing: "2px", marginBottom: "1rem" }}>
             {TAB_LABELS[tab]}
           </h2>
           {LESSONS[tab].map(lesson => (
@@ -120,9 +219,29 @@ export default function IlonggoPage() {
                   <tbody>
                     {lesson.rows.map((row, i) => (
                       <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                        {row.map((cell, j) => (
-                          <td key={j} style={{ ...td, color: j === 0 ? "#e2e8f0" : j === 1 && lesson.hasFormal ? "#86efac" : "#94a3b8" }}>{cell}</td>
-                        ))}
+                        <td style={{ ...td, color: "#e2e8f0" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            {row[0]}
+                            {AUDIO[row[0]] && (
+                              <button onClick={() => playAudio(row[0])} style={speakBtn}>🔊</button>
+                            )}
+                          </div>
+                        </td>
+                        {lesson.hasFormal ? (
+                          <>
+                            <td style={{ ...td, color: "#86efac" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                {row[1]}
+                                {row[1] !== "—" && AUDIO[row[1]] && (
+                                  <button onClick={() => playAudio(row[1])} style={speakBtn}>🔊</button>
+                                )}
+                              </div>
+                            </td>
+                            <td style={{ ...td, color: "#94a3b8" }}>{row[2]}</td>
+                          </>
+                        ) : (
+                          <td style={{ ...td, color: "#94a3b8" }}>{row[1]}</td>
+                        )}
                       </tr>
                     ))}
                   </tbody>
@@ -134,11 +253,12 @@ export default function IlonggoPage() {
       ))}
 
       <footer style={{ textAlign: "center", padding: "2rem", color: "#334155", fontSize: "0.8rem" }}>
-        © 2026 talkaPH · Learn Filipino languages
+        2026 talkaPH - Learn Filipino languages
       </footer>
     </main>
   );
 }
 
+const speakBtn = { background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.3)", borderRadius: "50%", width: "28px", height: "28px", cursor: "pointer", color: "#f59e0b", fontSize: "12px", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 };
 const th = { padding: "0.75rem 1rem", textAlign: "left", color: "#94a3b8", fontWeight: "600", fontSize: "0.8rem", textTransform: "uppercase" };
 const td = { padding: "0.65rem 1rem" };
