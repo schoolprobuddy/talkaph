@@ -222,29 +222,33 @@ const LESSONS = {
 const TABS = ["basics", "vocabulary", "advanced"];
 const TAB_LABELS = { basics: "Basics", vocabulary: "Vocabulary", advanced: "Advanced" };
 
-// Responsive formal table: shows all 3 cols on desktop, collapses formal on mobile with toggle
 function FormalTable({ lesson }) {
   const [expandedRows, setExpandedRows] = useState({});
-
-  const toggleRow = (i) => {
-    setExpandedRows(prev => ({ ...prev, [i]: !prev[i] }));
-  };
+  const toggleRow = (i) => setExpandedRows(prev => ({ ...prev, [i]: !prev[i] }));
 
   return (
     <>
       <style>{`
         .formal-col { display: table-cell; }
-        .formal-hint { display: none; }
+        .po-toggle-col { display: none; }
         @media (max-width: 600px) {
           .formal-col { display: none; }
-          .formal-hint { display: inline-flex; }
+          .po-toggle-col { display: table-cell; }
         }
       `}</style>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem", tableLayout: "fixed" }}>
+        <colgroup>
+          <col style={{ width: "55%" }} />
+          <col className="formal-col" style={{ width: "30%" }} />
+          <col className="po-toggle-col" style={{ width: "20%" }} />
+          <col style={{ width: "45%" }} className="formal-col" />
+          <col style={{ width: "25%" }} className="po-toggle-col" />
+        </colgroup>
         <thead>
           <tr style={{ background: "rgba(255,255,255,0.05)" }}>
             <th style={th}>Informal</th>
             <th className="formal-col" style={th}>Formal (po)</th>
+            <th className="po-toggle-col" style={{ ...th, textAlign: "center" }}>Po</th>
             <th style={th}>English</th>
           </tr>
         </thead>
@@ -252,31 +256,16 @@ function FormalTable({ lesson }) {
           {lesson.rows.map((row, i) => (
             <>
               <tr key={i} style={{ borderBottom: expandedRows[i] ? "none" : "1px solid rgba(255,255,255,0.05)" }}>
+                {/* Informal */}
                 <td style={{ ...td, color: "#e2e8f0" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     {row[0]}
                     {AUDIO[row[0]] && (
                       <button onClick={() => playAudio(row[0])} style={speakBtn}>🔊</button>
                     )}
-                    {/* Mobile: po toggle button */}
-                    <button
-                      className="formal-hint"
-                      onClick={() => toggleRow(i)}
-                      style={{
-                        background: "rgba(134,239,172,0.15)",
-                        border: "1px solid rgba(134,239,172,0.3)",
-                        borderRadius: "12px",
-                        padding: "2px 8px",
-                        cursor: "pointer",
-                        color: "#86efac",
-                        fontSize: "11px",
-                        alignItems: "center",
-                      }}
-                    >
-                      {expandedRows[i] ? "hide po ▲" : "po ▼"}
-                    </button>
                   </div>
                 </td>
+                {/* Formal — desktop only */}
                 <td className="formal-col" style={{ ...td, color: "#86efac" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     {row[1]}
@@ -285,14 +274,34 @@ function FormalTable({ lesson }) {
                     )}
                   </div>
                 </td>
+                {/* Po toggle — mobile only */}
+                <td className="po-toggle-col" style={{ ...td, textAlign: "center", verticalAlign: "middle" }}>
+                  <button
+                    onClick={() => toggleRow(i)}
+                    style={{
+                      background: expandedRows[i] ? "rgba(134,239,172,0.25)" : "rgba(134,239,172,0.12)",
+                      border: "1px solid rgba(134,239,172,0.4)",
+                      borderRadius: "20px",
+                      padding: "4px 10px",
+                      cursor: "pointer",
+                      color: "#86efac",
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {expandedRows[i] ? "po ▲" : "po ▼"}
+                  </button>
+                </td>
+                {/* English */}
                 <td style={{ ...td, color: "#94a3b8" }}>{row[2]}</td>
               </tr>
-              {/* Mobile expanded formal row */}
+              {/* Expanded formal row — mobile only */}
               {expandedRows[i] && (
-                <tr key={`${i}-formal`} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(134,239,172,0.05)" }}>
-                  <td colSpan={2} style={{ ...td, color: "#86efac", paddingTop: "0.3rem" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <span style={{ fontSize: "0.75rem", color: "#64748b", marginRight: "4px" }}>Formal:</span>
+                <tr key={`${i}-formal`} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                  <td colSpan={3} style={{ ...td, paddingTop: "0.25rem", paddingBottom: "0.6rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#86efac" }}>
+                      <span style={{ fontSize: "0.72rem", color: "#64748b" }}>Formal:</span>
                       {row[1]}
                       {AUDIO[row[1]] && (
                         <button onClick={() => playAudio(row[1])} style={speakBtn}>🔊</button>
