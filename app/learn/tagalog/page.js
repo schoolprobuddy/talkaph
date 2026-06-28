@@ -376,9 +376,14 @@ export default function TagalogPage() {
           ))}
         </section>
       ))}
-
-      <footer style={{ textAlign: "center", padding: "2rem", color: "#334155", fontSize: "0.8rem" }}>
-        2026 talkaPH - Learn Filipino languages
+      <footer style={{ textAlign: "center", padding: "2rem 1rem", borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "1rem" }}>
+        <nav style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1rem" }}>
+          <a href="/" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>🏠 Home</a>
+          <a href="/learn" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>🌐 All Languages</a>
+          <a href="/about" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>About</a>
+          <a href="/privacy" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>Privacy Policy</a>
+        </nav>
+        <p style={{ color: "#475569", fontSize: "0.8rem", margin: 0 }}>© 2026 talkaPH - Learn Filipino languages</p>
       </footer>
     </main>
   );
