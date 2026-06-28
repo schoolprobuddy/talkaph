@@ -9,7 +9,7 @@ const AUDIO = {
   "Maayong gabii": "fix_063_maayong_gabii.mp3",
   "Salamat": "cb_146_salamat.mp3",
   "Salamat kaayo": "cb_m036_salamat_kaayo.mp3",
-  "Walay sapayan": "new_cb_expr_001_sige.mp3",
+ 
   "Paalam": "cb_147_paalam.mp3",
   "Paalam na": "cb_m037_paalam_na.mp3",
   "Oo": "fix_064_oo.mp3",
@@ -99,7 +99,7 @@ const LESSONS = {
       ["Maayong hapon","—","Good afternoon"],
       ["Maayong gabii","—","Good evening"],
       ["Salamat","Salamat kaayo","Thank you / Thank you very much"],
-      ["Walay sapayan","—","You're welcome"],
+
       ["Paalam","Paalam na","Goodbye"],
       ["Oo","—","Yes"],
       ["Dili","—","No"],
