@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 
 const AUDIO = {
@@ -221,6 +222,93 @@ const LESSONS = {
 const TABS = ["basics", "vocabulary", "advanced"];
 const TAB_LABELS = { basics: "Basics", vocabulary: "Vocabulary", advanced: "Advanced" };
 
+// Responsive formal table: shows all 3 cols on desktop, collapses formal on mobile with toggle
+function FormalTable({ lesson }) {
+  const [expandedRows, setExpandedRows] = useState({});
+
+  const toggleRow = (i) => {
+    setExpandedRows(prev => ({ ...prev, [i]: !prev[i] }));
+  };
+
+  return (
+    <>
+      <style>{`
+        .formal-col { display: table-cell; }
+        .formal-hint { display: none; }
+        @media (max-width: 600px) {
+          .formal-col { display: none; }
+          .formal-hint { display: inline-flex; }
+        }
+      `}</style>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
+        <thead>
+          <tr style={{ background: "rgba(255,255,255,0.05)" }}>
+            <th style={th}>Informal</th>
+            <th className="formal-col" style={th}>Formal (po)</th>
+            <th style={th}>English</th>
+          </tr>
+        </thead>
+        <tbody>
+          {lesson.rows.map((row, i) => (
+            <>
+              <tr key={i} style={{ borderBottom: expandedRows[i] ? "none" : "1px solid rgba(255,255,255,0.05)" }}>
+                <td style={{ ...td, color: "#e2e8f0" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                    {row[0]}
+                    {AUDIO[row[0]] && (
+                      <button onClick={() => playAudio(row[0])} style={speakBtn}>🔊</button>
+                    )}
+                    {/* Mobile: po toggle button */}
+                    <button
+                      className="formal-hint"
+                      onClick={() => toggleRow(i)}
+                      style={{
+                        background: "rgba(134,239,172,0.15)",
+                        border: "1px solid rgba(134,239,172,0.3)",
+                        borderRadius: "12px",
+                        padding: "2px 8px",
+                        cursor: "pointer",
+                        color: "#86efac",
+                        fontSize: "11px",
+                        alignItems: "center",
+                      }}
+                    >
+                      {expandedRows[i] ? "hide po ▲" : "po ▼"}
+                    </button>
+                  </div>
+                </td>
+                <td className="formal-col" style={{ ...td, color: "#86efac" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    {row[1]}
+                    {AUDIO[row[1]] && (
+                      <button onClick={() => playAudio(row[1])} style={speakBtn}>🔊</button>
+                    )}
+                  </div>
+                </td>
+                <td style={{ ...td, color: "#94a3b8" }}>{row[2]}</td>
+              </tr>
+              {/* Mobile expanded formal row */}
+              {expandedRows[i] && (
+                <tr key={`${i}-formal`} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)", background: "rgba(134,239,172,0.05)" }}>
+                  <td colSpan={2} style={{ ...td, color: "#86efac", paddingTop: "0.3rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span style={{ fontSize: "0.75rem", color: "#64748b", marginRight: "4px" }}>Formal:</span>
+                      {row[1]}
+                      {AUDIO[row[1]] && (
+                        <button onClick={() => playAudio(row[1])} style={speakBtn}>🔊</button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
 export default function TagalogPage() {
   return (
     <main style={{
@@ -254,78 +342,41 @@ export default function TagalogPage() {
                 <span style={{ fontWeight: "700", fontSize: "1rem" }}>{lesson.title}</span>
               </div>
               <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
-                  <thead>
-                    <tr style={{ background: "rgba(255,255,255,0.05)" }}>
-                      {lesson.hasFormal
-                        ? <><th style={th}>Informal</th><th style={th}>Formal (po)</th><th style={th}>English</th></>
-                        : <><th style={th}>Tagalog</th><th style={th}>English</th></>
-                      }
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {lesson.rows.map((row, i) => (
-                      <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-                        <td style={{ ...td, color: "#e2e8f0" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                            {row[0]}
-                            {AUDIO[row[0]] && (
-                              <button onClick={() => playAudio(row[0])} style={speakBtn}>🔊</button>
-                            )}
-                          </div>
-                        </td>
-                        {lesson.hasFormal ? (
-                          <>
-                            <td style={{ ...td, color: "#86efac" }}>
-                              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                {row[1]}
-                                {AUDIO[row[1]] && (
-                                  <button onClick={() => playAudio(row[1])} style={speakBtn}>🔊</button>
-                                )}
-                              </div>
-                            </td>
-                            <td style={{ ...td, color: "#94a3b8" }}>{row[2]}</td>
-                          </>
-                        ) : (
-                          <td style={{ ...td, color: "#94a3b8" }}>{row[1]}</td>
-                        )}
+                {lesson.hasFormal ? (
+                  <FormalTable lesson={lesson} />
+                ) : (
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
+                    <thead>
+                      <tr style={{ background: "rgba(255,255,255,0.05)" }}>
+                        <th style={th}>Tagalog</th>
+                        <th style={th}>English</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {lesson.rows.map((row, i) => (
+                        <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                          <td style={{ ...td, color: "#e2e8f0" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              {row[0]}
+                              {AUDIO[row[0]] && (
+                                <button onClick={() => playAudio(row[0])} style={speakBtn}>🔊</button>
+                              )}
+                            </div>
+                          </td>
+                          <td style={{ ...td, color: "#94a3b8" }}>{row[1]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           ))}
         </section>
       ))}
 
-     {/* Travel Section */}
-      <section style={{ maxWidth: "900px", margin: "0 auto", padding: "1rem 2rem 3rem" }}>
-        <div style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "1.25rem", padding: "2rem" }}>
-          <h2 style={{ color: "#fbbf24", fontWeight: "800", fontSize: "1.1rem", marginBottom: "0.5rem" }}>
-            🌴 Planning a trip to the Philippines?
-          </h2>
-          <p style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1.5rem" }}>
-            Now that you know some Tagalog, put it to use! Book tours, activities and experiences across the Philippines.
-          </p>
-          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-            <a href="https://affiliate.klook.com/redirect?aid=125678&aff_adid=1319478&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Flist%2Fphilippines%2F"
-              target="_blank" rel="noopener noreferrer"
-              style={{ background: "#ff5722", color: "#fff", padding: "0.7rem 1.5rem", borderRadius: "999px", fontWeight: "700", textDecoration: "none", fontSize: "0.9rem" }}>
-              🎯 Find Activities on Klook
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <footer style={{ textAlign: "center", padding: "2rem 2rem 3rem", borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "1rem" }}>
-        <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", flexWrap: "wrap", marginBottom: "1rem" }}>
-          <Link href="/" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>🏠 Home</Link>
-          <Link href="/learn" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>🌐 All Languages</Link>
-          <Link href="/about" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>About</Link>
-          <Link href="/privacy" style={{ color: "#64748b", textDecoration: "none", fontSize: "0.9rem" }}>Privacy Policy</Link>
-        </div>
-        <div style={{ color: "#334155", fontSize: "0.8rem" }}>2026 talkaPH - Learn Filipino languages</div>
+      <footer style={{ textAlign: "center", padding: "2rem", color: "#334155", fontSize: "0.8rem" }}>
+        2026 talkaPH - Learn Filipino languages
       </footer>
     </main>
   );
