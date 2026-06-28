@@ -5,7 +5,7 @@ const AUDIO = {
   "Kamusta ka?": "fix_076_kamusta_ka.mp3",
   "Kamusta kamo?": "fix_077_kamusta_kamo.mp3",
   "Maayong aga": "fix_078_maayong_aga.mp3",
-  "new_il_gr_maayong_aga_inyo.mp3",
+  "Maayong aga sa inyo": "new_il_gr_maayong_aga_inyo.mp3",
   "Maayong hapon": "new_il_gr_maayong_hapon.mp3",
   "Maayong hapon sa inyo": "new_il_gr_maayong_hapon_inyo2.mp3",
   "Maayong gab-i": "new_il_gr_maayong_gabi.mp3",
