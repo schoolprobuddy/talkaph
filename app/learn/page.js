@@ -55,7 +55,6 @@ const ALL_PHRASES = [
   { tl: "Diretso lang", en: "Go straight", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_dir_diretso.mp3" },
   { tl: "Lumiko sa kaliwa", en: "Turn left", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_dir_kaliwa.mp3" },
   { tl: "Lumiko sa kanan", en: "Turn right", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_dir_kanan.mp3" },
-
   // CEBUANO - Greetings
   { tl: "Kumusta ka?", en: "How are you?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "cb_142_kumusta_ka.mp3" },
   { tl: "Maayong buntag", en: "Good morning", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "fix_061_maayong_buntag.mp3" },
@@ -85,7 +84,6 @@ const ALL_PHRASES = [
   { tl: "Liko sa tuo", en: "Turn right", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_dir_004_liko_sa_tuo.mp3" },
   { tl: "Diretso lang", en: "Go straight", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_dir_005_diretso_lang.mp3" },
   { tl: "Asa ang CR?", en: "Where is the restroom?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_dir_001_asa_ang_cr.mp3" },
-
   // ILONGGO - Greetings
   { tl: "Kamusta ka?", en: "How are you?", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "fix_076_kamusta_ka.mp3" },
   { tl: "Kamusta kamo?", en: "How are you? (plural)", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "fix_077_kamusta_kamo.mp3" },
@@ -258,16 +256,26 @@ export default function LearnPage() {
         </div>
       </section>
 
-      {/* Language Cards */}
+      {/* Language Cards — equal height fix */}
       <section style={{ maxWidth: "900px", margin: "0 auto", padding: "0 2rem 4rem" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem" }}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: "1.5rem",
+          alignItems: "stretch",
+        }}>
           {LANGUAGES.map(lang => (
-            <Link key={lang.name} href={lang.href} style={{ textDecoration: "none" }}>
+            <Link key={lang.name} href={lang.href} style={{ textDecoration: "none", display: "flex" }}>
               <div style={{
                 background: "rgba(255,255,255,0.05)",
                 border: `1px solid ${lang.color}30`,
-                borderRadius: "1.25rem", padding: "1.75rem",
-                cursor: "pointer", transition: "transform 0.2s, border-color 0.2s",
+                borderRadius: "1.25rem",
+                padding: "1.75rem",
+                cursor: "pointer",
+                transition: "transform 0.2s, border-color 0.2s",
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
               }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.borderColor = `${lang.color}60`; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.borderColor = `${lang.color}30`; }}
@@ -275,11 +283,12 @@ export default function LearnPage() {
                 <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>{lang.icon}</div>
                 <div style={{ fontWeight: "800", fontSize: "1.3rem", color: lang.color, marginBottom: "0.2rem" }}>{lang.name}</div>
                 <div style={{ color: "#64748b", fontSize: "0.8rem", fontStyle: "italic", marginBottom: "0.6rem" }}>{lang.sub}</div>
-                <div style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: "1rem" }}>{lang.desc}</div>
+                <div style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.5, marginBottom: "1rem", flex: 1 }}>{lang.desc}</div>
                 <span style={{
                   background: `${lang.color}20`, border: `1px solid ${lang.color}40`,
                   borderRadius: "999px", padding: "4px 14px",
-                  color: lang.color, fontSize: "0.8rem", fontWeight: "600"
+                  color: lang.color, fontSize: "0.8rem", fontWeight: "600",
+                  alignSelf: "flex-start",
                 }}>
                   {lang.phrases} →
                 </span>
