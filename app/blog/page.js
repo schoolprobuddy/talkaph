@@ -51,7 +51,7 @@ export default function BlogIndexPage() {
         <div style={{ display: "grid", gap: "1.5rem" }}>
           {POSTS.map(post => (
             <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: "none" }}>
-             <div style={{
+              <div style={{
                 background: "rgba(255,255,255,0.05)",
                 border: `1px solid ${post.color}30`,
                 borderRadius: "1.25rem",
@@ -92,8 +92,6 @@ export default function BlogIndexPage() {
                     {post.date} · {post.readTime}
                   </p>
                 </div>
-              </div>
-                </p>
               </div>
             </Link>
           ))}
