@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQoJw7o_XGhZw-dBRR2knJE4Ts9DePZvxIEBC7G_9eer71rEcvAHsxL6SwuR2udt6lOA/exec";
+const PAGE_PASSWORD = "ilonggo2026"; // change this to whatever you tell Maria
+const SHARED_SECRET = "talkaph-il-9f3k2m"; // must match SHARED_SECRET in Apps Script
 
 function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
@@ -54,6 +56,7 @@ function RecordButton({ row, onDone }) {
       const base64 = await blobToBase64(blob);
       const form = new URLSearchParams();
       form.append("action", "upload");
+      form.append("secret", SHARED_SECRET);
       form.append("rowNumber", row.rowNumber);
       form.append("filename", row["Audio filename"]);
       form.append("audioData", base64);
@@ -121,12 +124,75 @@ function RecordButton({ row, onDone }) {
   );
 }
 
+function PasswordGate({ onUnlock }) {
+  const [input, setInput] = useState("");
+  const [error, setError] = useState(false);
+
+  function submit() {
+    if (input === PAGE_PASSWORD) {
+      sessionStorage.setItem("talkaph_record_unlocked", "yes");
+      onUnlock();
+    } else {
+      setError(true);
+    }
+  }
+
+  return (
+    <main style={{
+      minHeight: "100vh",
+      background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f4c3a 100%)",
+      fontFamily: "'Segoe UI', system-ui, sans-serif",
+      color: "#fff",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "2rem",
+    }}>
+      <div style={{ maxWidth: "320px", width: "100%", textAlign: "center" }}>
+        <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🔒</div>
+        <p style={{ fontWeight: "800", fontSize: "1.2rem", marginBottom: "0.25rem" }}>talkaPH recording</p>
+        <p style={{ color: "#94a3b8", fontSize: "0.85rem", marginBottom: "1.5rem" }}>Enter the access code to continue.</p>
+        <input
+          type="password"
+          value={input}
+          onChange={(e) => { setInput(e.target.value); setError(false); }}
+          onKeyDown={(e) => e.key === "Enter" && submit()}
+          placeholder="Access code"
+          style={{
+            width: "100%", padding: "0.75rem 1rem", marginBottom: "0.75rem",
+            borderRadius: "0.6rem", border: error ? "1px solid #ef4444" : "1px solid rgba(255,255,255,0.15)",
+            background: "rgba(255,255,255,0.07)", color: "#fff", fontSize: "0.95rem",
+            outline: "none", boxSizing: "border-box", textAlign: "center",
+          }}
+        />
+        {error && <p style={{ color: "#ef4444", fontSize: "0.8rem", marginBottom: "0.75rem" }}>Incorrect code, try again.</p>}
+        <button onClick={submit} style={{
+          width: "100%", padding: "0.7rem", borderRadius: "999px",
+          background: "#fbbf24", color: "#0f172a", border: "none",
+          fontWeight: "800", fontSize: "0.9rem", cursor: "pointer",
+        }}>
+          Continue
+        </button>
+      </div>
+    </main>
+  );
+}
+
 export default function RecordPage() {
+  const [unlocked, setUnlocked] = useState(false);
+  const [checked, setChecked] = useState(false);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newPhrase, setNewPhrase] = useState("");
   const [newMeaning, setNewMeaning] = useState("");
   const [adding, setAdding] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("talkaph_record_unlocked") === "yes") {
+      setUnlocked(true);
+    }
+    setChecked(true);
+  }, []);
 
   async function loadRows() {
     setLoading(true);
@@ -141,8 +207,8 @@ export default function RecordPage() {
   }
 
   useEffect(() => {
-    loadRows();
-  }, []);
+    if (unlocked) loadRows();
+  }, [unlocked]);
 
   async function addPhrase() {
     if (!newPhrase.trim()) {
@@ -153,6 +219,7 @@ export default function RecordPage() {
     try {
       const form = new URLSearchParams();
       form.append("action", "addPhrase");
+      form.append("secret", SHARED_SECRET);
       form.append("phrase", newPhrase.trim());
       form.append("meaning", newMeaning.trim() || "(not provided)");
 
@@ -171,6 +238,9 @@ export default function RecordPage() {
     }
     setAdding(false);
   }
+
+  if (!checked) return null;
+  if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;
 
   const recordedCount = rows.filter((r) => r.Status === "Recorded").length;
 
