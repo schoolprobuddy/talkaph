@@ -19,6 +19,7 @@ function RecordButton({ row, onDone }) {
   const [state, setState] = useState(row.Status === "Recorded" ? "done" : "idle");
   const [seconds, setSeconds] = useState(0);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [showPlayer, setShowPlayer] = useState(false);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const timerRef = useRef(null);
@@ -42,6 +43,7 @@ function RecordButton({ row, onDone }) {
 
       recorder.start();
       setState("recording");
+      setShowPlayer(false);
       setSeconds(0);
       timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
     } catch (err) {
@@ -134,13 +136,15 @@ function RecordButton({ row, onDone }) {
   }
 
   if (state === "done") {
-    const playUrl = previewUrl || row["Audio URL"];
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
-        {playUrl && !previewUrl && (
-          <iframe src={playUrl} style={{ width: "180px", height: "60px", border: "none" }} allow="autoplay" />
+        {previewUrl ? (
+          <audio src={previewUrl} controls style={{ height: "32px", maxWidth: "160px" }} />
+        ) : (
+          showPlayer && row["Audio URL"] && (
+            <iframe src={row["Audio URL"]} style={{ width: "180px", height: "60px", border: "none", borderRadius: "8px" }} allow="autoplay" />
+          )
         )}
-        {previewUrl && <audio src={previewUrl} controls style={{ height: "32px", maxWidth: "160px" }} />}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{
             fontSize: "0.75rem", fontWeight: "700", color: "#10b981",
@@ -148,6 +152,15 @@ function RecordButton({ row, onDone }) {
           }}>
             ✓ Recorded
           </span>
+          {!previewUrl && row["Audio URL"] && (
+            <button onClick={() => setShowPlayer(!showPlayer)} style={{
+              padding: "0.3rem 0.7rem", borderRadius: "999px",
+              background: "rgba(251,191,36,0.15)", border: "1px solid rgba(251,191,36,0.5)",
+              color: "#fbbf24", cursor: "pointer", fontSize: "0.75rem", fontWeight: "700",
+            }}>
+              {showPlayer ? "✕ Close" : "▶ Listen"}
+            </button>
+          )}
           <button onClick={startRecording} style={{
             padding: "0.3rem 0.7rem", borderRadius: "999px",
             background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
@@ -394,7 +407,7 @@ export default function RecordPage() {
             </div>
           </div>
         )}
-      </section>
+     </section>
     </main>
   );
 }
