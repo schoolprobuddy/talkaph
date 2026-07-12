@@ -3,8 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQoJw7o_XGhZw-dBRR2knJE4Ts9DePZvxIEBC7G_9eer71rEcvAHsxL6SwuR2udt6lOA/exec";
-const PAGE_PASSWORD = "ilonggo2026"; // change this to whatever you tell Maria
-const SHARED_SECRET = "talkaph-il-9f3k2m"; // must match SHARED_SECRET in Apps Script
+const PAGE_PASSWORD = "ilonggo2026";
+const SHARED_SECRET = "talkaph-il-9f3k2m";
 
 function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
@@ -18,9 +18,11 @@ function blobToBase64(blob) {
 function RecordButton({ row, onDone }) {
   const [state, setState] = useState(row.Status === "Recorded" ? "done" : "idle");
   const [seconds, setSeconds] = useState(0);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const timerRef = useRef(null);
+  const blobRef = useRef(null);
 
   async function startRecording() {
     try {
@@ -30,10 +32,12 @@ function RecordButton({ row, onDone }) {
       chunksRef.current = [];
 
       recorder.ondataavailable = (e) => chunksRef.current.push(e.data);
-      recorder.onstop = async () => {
+      recorder.onstop = () => {
         stream.getTracks().forEach((t) => t.stop());
         const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-        await uploadRecording(blob);
+        blobRef.current = blob;
+        setPreviewUrl(URL.createObjectURL(blob));
+        setState("preview");
       };
 
       recorder.start();
@@ -48,12 +52,18 @@ function RecordButton({ row, onDone }) {
   function stopRecording() {
     clearInterval(timerRef.current);
     if (mediaRecorderRef.current) mediaRecorderRef.current.stop();
-    setState("uploading");
   }
 
-  async function uploadRecording(blob) {
+  function reRecord() {
+    setPreviewUrl(null);
+    blobRef.current = null;
+    setState("idle");
+  }
+
+  async function submitRecording() {
+    setState("uploading");
     try {
-      const base64 = await blobToBase64(blob);
+      const base64 = await blobToBase64(blobRef.current);
       const form = new URLSearchParams();
       form.append("action", "upload");
       form.append("secret", SHARED_SECRET);
@@ -68,11 +78,11 @@ function RecordButton({ row, onDone }) {
         setState("done");
         onDone();
       } else {
-        setState("idle");
+        setState("preview");
         alert("Upload failed: " + (data.error || "unknown error"));
       }
     } catch (err) {
-      setState("idle");
+      setState("preview");
       alert("Upload failed. Check your internet connection and try again.");
     }
   }
@@ -80,12 +90,37 @@ function RecordButton({ row, onDone }) {
   if (state === "recording") {
     return (
       <button onClick={stopRecording} style={{
-        width: "44px", height: "44px", borderRadius: "50%",
+        padding: "0.4rem 0.9rem", borderRadius: "999px",
         background: "#ef4444", border: "none", color: "#fff",
-        cursor: "pointer", fontSize: "0.75rem", fontWeight: "700",
+        cursor: "pointer", fontSize: "0.8rem", fontWeight: "700",
+        display: "flex", alignItems: "center", gap: "6px",
       }}>
-        {seconds}s
+        ⏹ Stop · {seconds}s
       </button>
+    );
+  }
+
+  if (state === "preview") {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
+        <audio src={previewUrl} controls style={{ height: "32px", maxWidth: "160px" }} />
+        <div style={{ display: "flex", gap: "6px" }}>
+          <button onClick={reRecord} style={{
+            padding: "0.3rem 0.7rem", borderRadius: "999px",
+            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
+            color: "#94a3b8", cursor: "pointer", fontSize: "0.75rem",
+          }}>
+            🔄 Re-record
+          </button>
+          <button onClick={submitRecording} style={{
+            padding: "0.3rem 0.9rem", borderRadius: "999px",
+            background: "#fbbf24", border: "none",
+            color: "#0f172a", cursor: "pointer", fontSize: "0.75rem", fontWeight: "700",
+          }}>
+            ✓ Submit
+          </button>
+        </div>
+      </div>
     );
   }
 
