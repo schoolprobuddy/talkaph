@@ -11,6 +11,7 @@ const POSTS = [
     slug: "tagalog-phrases-for-tourists",
     category: "Travel",
     color: "#3b82f6",
+    icon: "🌴",
     title: "20 Tagalog Phrases Every Tourist Needs",
     excerpt:
       "The essential phrases for your first trip to the Philippines — greetings, ordering food, getting around, and the one little word that makes every Filipino smile.",
@@ -50,27 +51,48 @@ export default function BlogIndexPage() {
         <div style={{ display: "grid", gap: "1.5rem" }}>
           {POSTS.map(post => (
             <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: "none" }}>
-              <div style={{
+             <div style={{
                 background: "rgba(255,255,255,0.05)",
                 border: `1px solid ${post.color}30`,
                 borderRadius: "1.25rem",
                 padding: "1.75rem",
+                display: "flex",
+                gap: "1.5rem",
+                alignItems: "flex-start",
               }}>
-                <span style={{
-                  background: `${post.color}20`, border: `1px solid ${post.color}40`,
-                  borderRadius: "999px", padding: "3px 12px",
-                  color: post.color, fontSize: "0.75rem", fontWeight: "600",
+                <div style={{
+                  background: `${post.color}20`,
+                  border: `1px solid ${post.color}40`,
+                  borderRadius: "1rem",
+                  width: "72px",
+                  height: "72px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "2.2rem",
+                  flexShrink: 0,
                 }}>
-                  {post.category}
-                </span>
-                <h2 style={{ color: "#fff", fontSize: "1.35rem", fontWeight: "800", margin: "0.9rem 0 0.5rem" }}>
-                  {post.title}
-                </h2>
-                <p style={{ color: "#94a3b8", fontSize: "0.95rem", lineHeight: 1.6, margin: "0 0 0.9rem" }}>
-                  {post.excerpt}
-                </p>
-                <p style={{ color: "#475569", fontSize: "0.8rem", margin: 0 }}>
-                  {post.date} · {post.readTime}
+                  {post.icon}
+                </div>
+                <div>
+                  <span style={{
+                    background: `${post.color}20`, border: `1px solid ${post.color}40`,
+                    borderRadius: "999px", padding: "3px 12px",
+                    color: post.color, fontSize: "0.75rem", fontWeight: "600",
+                  }}>
+                    {post.category}
+                  </span>
+                  <h2 style={{ color: "#fff", fontSize: "1.35rem", fontWeight: "800", margin: "0.9rem 0 0.5rem" }}>
+                    {post.title}
+                  </h2>
+                  <p style={{ color: "#94a3b8", fontSize: "0.95rem", lineHeight: 1.6, margin: "0 0 0.9rem" }}>
+                    {post.excerpt}
+                  </p>
+                  <p style={{ color: "#475569", fontSize: "0.8rem", margin: 0 }}>
+                    {post.date} · {post.readTime}
+                  </p>
+                </div>
+              </div>
                 </p>
               </div>
             </Link>
