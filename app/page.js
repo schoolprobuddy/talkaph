@@ -82,6 +82,7 @@ export default function Home() {
           <Link href="/blog" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>Blog</Link>
           <Link href="/about" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>About</Link>
           <Link href="/privacy" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>Privacy Policy</Link>
+          <a href="https://www.facebook.com/profile.php?id=61591506690001" target="_blank" rel="noopener noreferrer" style={{ color: "#94a3b8", textDecoration: "none", fontSize: "0.9rem" }}>Facebook</a>
         </nav>
         <p style={{ color: "#334155", fontSize: "0.8rem", margin: 0 }}>© 2026 talkaPH · Learn Filipino languages</p>
       </footer>
