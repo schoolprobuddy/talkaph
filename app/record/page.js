@@ -126,25 +126,33 @@ function RecordButton({ row, onDone }) {
 
   if (state === "uploading") {
     return (
-      <button disabled style={{
-        width: "44px", height: "44px", borderRadius: "50%",
-        background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
-        color: "#94a3b8", cursor: "default", fontSize: "0.75rem",
-      }}>
-        …
-      </button>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
+        <audio src={previewUrl} controls style={{ height: "32px", maxWidth: "160px" }} />
+        <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>Uploading…</span>
+      </div>
     );
   }
 
   if (state === "done") {
     return (
-      <button onClick={startRecording} style={{
-        width: "44px", height: "44px", borderRadius: "50%",
-        background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.5)",
-        color: "#10b981", cursor: "pointer", fontSize: "1.1rem",
-      }} title="Recorded — tap to re-record">
-        ✓
-      </button>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
+        {previewUrl && <audio src={previewUrl} controls style={{ height: "32px", maxWidth: "160px" }} />}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{
+            fontSize: "0.75rem", fontWeight: "700", color: "#10b981",
+            display: "flex", alignItems: "center", gap: "4px",
+          }}>
+            ✓ Recorded
+          </span>
+          <button onClick={startRecording} style={{
+            padding: "0.3rem 0.7rem", borderRadius: "999px",
+            background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
+            color: "#94a3b8", cursor: "pointer", fontSize: "0.75rem",
+          }}>
+            🔄 Re-record
+          </button>
+        </div>
+      </div>
     );
   }
 
