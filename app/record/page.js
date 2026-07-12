@@ -134,8 +134,12 @@ function RecordButton({ row, onDone }) {
   }
 
   if (state === "done") {
+    const playUrl = previewUrl || row["Audio URL"];
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "6px" }}>
+        {playUrl && !previewUrl && (
+          <iframe src={playUrl} style={{ width: "180px", height: "60px", border: "none" }} allow="autoplay" />
+        )}
         {previewUrl && <audio src={previewUrl} controls style={{ height: "32px", maxWidth: "160px" }} />}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{
