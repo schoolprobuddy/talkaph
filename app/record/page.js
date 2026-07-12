@@ -145,8 +145,8 @@ export default function RecordPage() {
   }, []);
 
   async function addPhrase() {
-    if (!newPhrase.trim() || !newMeaning.trim()) {
-      alert("Please fill in both the phrase and its meaning.");
+    if (!newPhrase.trim()) {
+      alert("Please enter the Ilonggo phrase.");
       return;
     }
     setAdding(true);
@@ -154,7 +154,7 @@ export default function RecordPage() {
       const form = new URLSearchParams();
       form.append("action", "addPhrase");
       form.append("phrase", newPhrase.trim());
-      form.append("meaning", newMeaning.trim());
+      form.append("meaning", newMeaning.trim() || "(not provided)");
 
       const res = await fetch(SCRIPT_URL, { method: "POST", body: form });
       const data = await res.json();
@@ -228,7 +228,6 @@ export default function RecordPage() {
               </div>
             ))}
 
-            {/* Add new phrase */}
             <div style={{
               background: "rgba(251,191,36,0.06)",
               border: "1px dashed rgba(251,191,36,0.4)",
@@ -253,7 +252,7 @@ export default function RecordPage() {
               />
               <input
                 type="text"
-                placeholder="English meaning"
+                placeholder="English meaning (optional)"
                 value={newMeaning}
                 onChange={(e) => setNewMeaning(e.target.value)}
                 style={{
