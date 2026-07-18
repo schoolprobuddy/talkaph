@@ -238,11 +238,70 @@ function PasswordGate({ onUnlock }) {
   );
 }
 
+function OverviewGrid({ rows }) {
+  return (
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+      gap: "0.4rem",
+    }}>
+      {rows.map((row) => {
+        const recorded = row.Status === "Recorded";
+        const isNew = row.Status === "New — pending review";
+        return (
+          <div key={row.rowNumber} style={{
+            background: recorded ? "rgba(16,185,129,0.07)" : "rgba(255,255,255,0.04)",
+            border: recorded ? "1px solid rgba(16,185,129,0.25)" : "1px solid rgba(255,255,255,0.08)",
+            borderRadius: "0.6rem",
+            padding: "0.5rem 0.75rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "0.5rem",
+          }}>
+            <div style={{ minWidth: 0 }}>
+              <p style={{
+                margin: 0, fontWeight: "600", fontSize: "0.85rem", color: "#e2e8f0",
+                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+              }}>
+                {row.Phrase}
+                {isNew && (
+                  <span style={{
+                    marginLeft: "6px",
+                    background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.4)",
+                    color: "#38bdf8", fontSize: "0.6rem", fontWeight: "700",
+                    padding: "1px 6px", borderRadius: "999px", verticalAlign: "middle",
+                  }}>
+                    New
+                  </span>
+                )}
+              </p>
+              <p style={{
+                margin: "1px 0 0", fontSize: "0.72rem", color: "#64748b",
+                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+              }}>
+                {row.Meaning}
+              </p>
+            </div>
+            <span style={{
+              fontSize: "0.9rem", fontWeight: "800", flexShrink: 0,
+              color: recorded ? "#10b981" : "#475569",
+            }}>
+              {recorded ? "✓" : "—"}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function RecordPage() {
   const [unlocked, setUnlocked] = useState(false);
   const [checked, setChecked] = useState(false);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [view, setView] = useState("record"); // "record" | "overview"
   const [newPhrase, setNewPhrase] = useState("");
   const [newMeaning, setNewMeaning] = useState("");
   const [adding, setAdding] = useState(false);
@@ -304,6 +363,17 @@ export default function RecordPage() {
 
   const recordedCount = rows.filter((r) => r.Status === "Recorded").length;
 
+  const tabStyle = (active) => ({
+    padding: "0.45rem 1.1rem",
+    borderRadius: "999px",
+    border: active ? "1px solid rgba(251,191,36,0.6)" : "1px solid rgba(255,255,255,0.15)",
+    background: active ? "rgba(251,191,36,0.15)" : "rgba(255,255,255,0.05)",
+    color: active ? "#fbbf24" : "#94a3b8",
+    fontWeight: "700",
+    fontSize: "0.8rem",
+    cursor: "pointer",
+  });
+
   return (
     <main style={{
       minHeight: "100vh",
@@ -317,16 +387,27 @@ export default function RecordPage() {
         </Link>
       </nav>
 
-      <section style={{ maxWidth: "700px", margin: "0 auto", padding: "1rem 1.25rem 3rem" }}>
+      <section style={{ maxWidth: view === "overview" ? "900px" : "700px", margin: "0 auto", padding: "1rem 1.25rem 3rem" }}>
         <h1 style={{ fontSize: "1.6rem", fontWeight: "900", marginBottom: "0.25rem" }}>
           🌺 Ilonggo recording
         </h1>
-        <p style={{ color: "#94a3b8", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
+        <p style={{ color: "#94a3b8", fontSize: "0.9rem", marginBottom: "1rem" }}>
           {loading ? "Loading…" : `${recordedCount} of ${rows.length} recorded`}
         </p>
 
+        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.25rem" }}>
+          <button onClick={() => setView("record")} style={tabStyle(view === "record")}>
+            🎙️ Record view
+          </button>
+          <button onClick={() => setView("overview")} style={tabStyle(view === "overview")}>
+            📋 Overview
+          </button>
+        </div>
+
         {loading ? (
           <p style={{ color: "#64748b" }}>Loading phrases…</p>
+        ) : view === "overview" ? (
+          <OverviewGrid rows={rows} />
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {rows.map((row) => (
@@ -407,7 +488,7 @@ export default function RecordPage() {
             </div>
           </div>
         )}
-     </section>
+      </section>
     </main>
   );
 }
