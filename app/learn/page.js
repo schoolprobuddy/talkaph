@@ -123,7 +123,7 @@ function playAudio(filename) {
 const LANGUAGES = [
   { name: "Tagalog", sub: "Filipino", desc: "The national language, spoken across the Philippines", icon: "🗺️", color: "#3b82f6", href: "/learn/tagalog", phrases: "90 phrases" },
   { name: "Cebuano", sub: "Bisaya", desc: "Spoken in Visayas and Mindanao", icon: "🌊", color: "#10b981", href: "/learn/cebuano", phrases: "90 phrases" },
-  { name: "Ilonggo", sub: "Hiligaynon", desc: "Spoken in Western Visayas", icon: "🌺", color: "#f59e0b", href: "/learn/ilonggo", phrases: "80 phrases" },
+  { name: "Ilonggo", sub: "Hiligaynon", desc: "Spoken in Western Visayas", icon: "🌺", color: "#f59e0b", href: "/learn/ilonggo", phrases: "111 words & phrases" },
 ];
 
 export default function LearnPage() {
