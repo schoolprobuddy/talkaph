@@ -143,7 +143,7 @@ const ALL_PHRASES = [
   { tl: "Kitaay ta liwat", en: "See you again", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_kitaay_ta_liwat.mp3" },
   { tl: "Malakat nako", en: "I'm leaving now", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_malakat_nako.mp3" },
   { tl: "Halong ka", en: "Take care", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_halong_ka.mp3" },
-  { tl: "Taga diin ka?", en: "Where are you from?", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_taga_diin_ka.mp3" },
+  { tl: "Taga diin ka?", en: "Where are you from? / Where do you live?", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_taga_diin_ka.mp3" },
   { tl: "Gahod", en: "Noisy", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_gahod.mp3" },
   { tl: "Diin ka makadto?", en: "Where are you going?", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_diin_ka_makadto.mp3" },
   { tl: "Akon", en: "Mine", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "new_il_custom_akon.mp3" },
