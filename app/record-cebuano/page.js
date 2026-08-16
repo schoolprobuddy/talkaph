@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCZaG0m3mHsp677wzSbBproh8cwf8YlVQz8ou6gGgq_NWNndLIGlLAlvxhEFc7_Mld/exec";
-const PAGE_PASSWORD = "cebuano2026";
+const PAGE_PASSWORD = "ajhaeY*2oi2";
 const SHARED_SECRET = "talkaph-cb-7x4q1w";
 
 function blobToBase64(blob) {
