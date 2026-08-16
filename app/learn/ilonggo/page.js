@@ -203,7 +203,7 @@ const LESSONS = {
       ["Kitaay ta liwat","See you again"],
       ["Malakat nako","I'm leaving now"],
       ["Halong ka","Take care"],
-      ["Taga diin ka?","Where are you from?"],
+      ["Taga diin ka?","Where are you from? / Where do you live?"],
       ["Gahod","Noisy"],
       ["Diin ka makadto?","Where are you going?"],
       ["Akon","Mine"],
