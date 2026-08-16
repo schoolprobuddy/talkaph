@@ -84,6 +84,25 @@ const ALL_PHRASES = [
   { tl: "Liko sa tuo", en: "Turn right", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_dir_004_liko_sa_tuo.mp3" },
   { tl: "Diretso lang", en: "Go straight", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_dir_005_diretso_lang.mp3" },
   { tl: "Asa ang CR?", en: "Where is the restroom?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_dir_001_asa_ang_cr.mp3" },
+  { tl: "Palihug tabangi ko", en: "Please, help me", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_palihug_tabangi_ko.mp3" },
+  { tl: "Hulat una", en: "Wait a moment", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_hulat_una.mp3" },
+  { tl: "Lakaw ta", en: "Let's go", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_lakaw_ta.mp3" },
+  { tl: "Ania ko", en: "I'm here", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_ania_ko.mp3" },
+  { tl: "Unsa nang orasa?", en: "What time is it?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_unsa_nang_orasa.mp3" },
+  { tl: "Pwede ko manghulam?", en: "Can I borrow?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_pwede_ko_manghulam.mp3" },
+  { tl: "Init karon", en: "It's hot today", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_init_karon.mp3" },
+  { tl: "Tam-is ni", en: "This is sweet", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_tam_is_ni.mp3" },
+  { tl: "Sakit akong ulo", en: "I have a headache", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_sakit_akong_ulo.mp3" },
+  { tl: "Lami ni", en: "This is delicious", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_lami_ni.mp3" },
+  { tl: "Ablihi ang pultahan", en: "Open the door", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_ablihi_ang_pultahan.mp3" },
+  { tl: "Mangaon na ta", en: "Let's eat", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_mangaon_na_ta.mp3" },
+  { tl: "Kaligo na", en: "Take a bath now", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_kaligo_na.mp3" },
+  { tl: "Naa ko sa kwarto", en: "I'm in my room", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_naa_ko_sa_kwarto.mp3" },
+  { tl: "Katulog na diha", en: "Go to sleep", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_katulog_na_diha.mp3" },
+  { tl: "Pila diay imong edad?", en: "How old are you?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_pila_diay_imong_edad.mp3" },
+  { tl: "Taga asa diay ka?", en: "Where are you from?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_taga_asa_diay_ka.mp3" },
+  { tl: "Unsay imong baligya?", en: "What are you selling?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_unsay_imong_baligya.mp3" },
+  { tl: "Asa diay ka nagpuyo?", en: "Where do you live?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "new_cb_custom_asa_diay_ka_nagpuyo.mp3" },
   // ILONGGO - Greetings
   { tl: "Kamusta ka?", en: "How are you?", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "fix_076_kamusta_ka.mp3" },
   { tl: "Kamusta kamo?", en: "How are you? (plural)", lang: "Ilonggo", langColor: "#f59e0b", href: "/learn/ilonggo", audio: "fix_077_kamusta_kamo.mp3" },
@@ -150,7 +169,7 @@ function playAudio(filename) {
 
 const LANGUAGES = [
   { name: "Tagalog", sub: "Filipino", desc: "The national language, spoken across the Philippines", icon: "🗺️", color: "#3b82f6", href: "/learn/tagalog", phrases: "90 phrases" },
-  { name: "Cebuano", sub: "Bisaya", desc: "Spoken in Visayas and Mindanao", icon: "🌊", color: "#10b981", href: "/learn/cebuano", phrases: "90 phrases" },
+  { name: "Cebuano", sub: "Bisaya", desc: "Spoken in Visayas and Mindanao", icon: "🌊", color: "#10b981", href: "/learn/cebuano", phrases: "127 words & phrases" },
   { name: "Ilonggo", sub: "Hiligaynon", desc: "Spoken in Western Visayas", icon: "🌺", color: "#f59e0b", href: "/learn/ilonggo", phrases: "111 words & phrases" },
 ];
 
