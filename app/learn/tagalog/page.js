@@ -126,7 +126,7 @@ const AUDIO = {
   "Gutom na ako": "tl_139_gutom_na_ako.mp3",
   "Pagod na ako": "tl_140_pagod_na_ako.mp3",
   "Mahal kita": "tl_141_mahal_kita.mp3",
-  "Hindi ko alam": "tl_020_hindi.mp3",
+  "Hindi ko alam": "new_tl_expr_hindi_ko_alam.mp3",
 };
 
 function playAudio(phrase) {
