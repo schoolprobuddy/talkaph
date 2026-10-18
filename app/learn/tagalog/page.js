@@ -127,6 +127,42 @@ const AUDIO = {
   "Pagod na ako": "tl_140_pagod_na_ako.mp3",
   "Mahal kita": "tl_141_mahal_kita.mp3",
   "Hindi ko alam": "new_tl_expr_hindi_ko_alam.mp3",
+  "Nakababatang kapatid": "new_tl_fam_nakababatang_kapatid.mp3",
+  "Bigas": "new_tl_food_bigas.mp3",
+  "Ang pangalan ko ay Ana": "new_tl_adv_ang_pangalan_ko_ay.mp3",
+  "Taga-Maynila ako": "new_tl_adv_taga_ako.mp3",
+  "Marunong akong mag-Tagalog": "new_tl_adv_marunong_akong_magtagalog.mp3",
+  "Ano ang pangalan mo?": "new_tl_adv_ano_ang_pangalan_mo.mp3",
+  "Nasaan ang CR?": "new_tl_dir_nasaan_ang_cr.mp3",
+  "Nasaan ito?": "new_tl_dir_nasaan_ito.mp3",
+  "Paano pumunta sa Maynila?": "new_tl_dir_paano_pumunta_sa.mp3",
+  "Malapit lang": "new_tl_dir_malapit_lang.mp3",
+  "Kumusta na?": "new_tl_expr_kumusta_na.mp3",
+  "Pakitulungan mo ako": "new_tl_custom_pakitulungan_mo_ako.mp3",
+  "Tara na": "new_tl_custom_tara_na.mp3",
+  "Nandito ako": "new_tl_custom_nandito_ako.mp3",
+  "Nandoon siya": "new_tl_custom_nandoon_siya.mp3",
+  "Anong oras na?": "new_tl_custom_anong_oras_na.mp3",
+  "Mahirap ito": "new_tl_custom_mahirap_ito.mp3",
+  "Balik ka ulit": "new_tl_custom_balik_ka_ulit.mp3",
+  "Magkita tayo ulit": "new_tl_custom_magkita_tayo_ulit.mp3",
+  "Aalis na ako": "new_tl_custom_aalis_na_ako.mp3",
+  "Taga-saan ka?": "new_tl_adv_tagasaan_ka.mp3",
+  "Maingay": "new_tl_custom_maingay.mp3",
+  "Saan ka pupunta?": "new_tl_custom_saan_ka_pupunta.mp3",
+  "Akin": "new_tl_custom_akin.mp3",
+  "Atin": "new_tl_custom_atin.mp3",
+  "Puwede bang humiram?": "new_tl_custom_puwede_bang_humiram.mp3",
+  "Mainit ngayon": "new_tl_weather_mainit_ngayon.mp3",
+  "Malamig ngayon": "new_tl_weather_malamig_ngayon.mp3",
+  "Matamis ito": "new_tl_custom_matamis_ito.mp3",
+  "Masakit ang ulo ko": "new_tl_custom_masakit_ang_ulo_ko.mp3",
+  "Maalat ito": "new_tl_custom_maalat_ito.mp3",
+  "Mapait ito": "new_tl_custom_mapait_ito.mp3",
+  "Maasim ito": "new_tl_custom_maasim_ito.mp3",
+  "Maanghang ito": "new_tl_custom_maanghang_ito.mp3",
+  "Masarap ito": "new_tl_custom_masarap_ito.mp3",
+  "Matabang ito": "new_tl_custom_matabang_ito.mp3",
 };
 
 function playAudio(phrase) {
@@ -160,7 +196,7 @@ const LESSONS = {
     ]},
     { id: "tl-b3", title: "III. Family Members", icon: "👨‍👩‍👧", hasFormal: false, rows: [
       ["Ama / Tatay","Father"],["Ina / Nanay","Mother"],["Kuya","Older brother"],
-      ["Ate","Older sister"],["Kapatid","Sibling"],["Lolo","Grandfather"],
+      ["Ate","Older sister"],["Kapatid","Sibling"],["Nakababatang kapatid","Younger sibling"],["Lolo","Grandfather"],
       ["Lola","Grandmother"],["Tito","Uncle"],["Tita","Aunt"],
       ["Anak","Child"],["Apo","Grandchild"],["Pinsan","Cousin"],
     ]},
@@ -176,7 +212,7 @@ const LESSONS = {
   ],
   vocabulary: [
     { id: "tl-v1", title: "I. Food & Drinks", icon: "🍚", hasFormal: false, rows: [
-      ["Kanin","Cooked rice"],["Tubig","Water"],["Tinapay","Bread"],
+      ["Kanin","Cooked rice"],["Bigas","Uncooked rice"],["Tubig","Water"],["Tinapay","Bread"],
       ["Manok","Chicken"],["Baboy","Pork"],["Isda","Fish"],
       ["Itlog","Egg"],["Gulay","Vegetables"],["Prutas","Fruit"],
       ["Gatas","Milk"],["Kape","Coffee"],
@@ -200,21 +236,60 @@ const LESSONS = {
   ],
   advanced: [
     { id: "tl-a1", title: "I. Introducing Yourself", icon: "💬", hasFormal: true, rows: [
+      ["Ang pangalan ko ay Ana","—","My name is ___"],
+      ["Taga-Maynila ako","—","I am from Manila"],
       ["Masaya akong makilala ka","Masaya po akong makilala kayo","Nice to meet you"],
+      ["Marunong akong mag-Tagalog","—","I speak Tagalog"],
+      ["Ano ang pangalan mo?","—","What is your name?"],
     ]},
     { id: "tl-a2", title: "II. Asking Directions", icon: "🗺️", hasFormal: false, rows: [
+      ["Nasaan ang CR?","Where is the restroom?"],
+      ["Nasaan ito?","Where is it?"],
+      ["Paano pumunta sa Maynila?","How do I get to ___?"],
       ["Lumiko sa kaliwa","Turn left"],
       ["Lumiko sa kanan","Turn right"],
       ["Diretso lang","Go straight"],
+      ["Malapit lang","It's just nearby"],
       ["Malayo ba?","Is it far?"],
     ]},
     { id: "tl-a3", title: "III. Everyday Expressions", icon: "🗣️", hasFormal: false, rows: [
       ["Sige","Okay / Sure"],
       ["Ay nako!","Oh my! (surprise)"],
+      ["Hindi ko alam","I don't know"],
       ["Sandali lang","Just a moment"],
       ["Gutom na ako","I am already hungry"],
       ["Pagod na ako","I am already tired"],
       ["Mahal kita","I love you"],
+      ["Kumusta na?","How are things?"],
+    ]},
+    { id: "tl-a4", title: "IV. Common Phrases", icon: "🗨️", hasFormal: false, rows: [
+      ["Pakitulungan mo ako","Please, help me"],
+      ["Tara na","Let's go"],
+      ["Nandito ako","I'm here"],
+      ["Nandoon siya","He/she is there"],
+      ["Anong oras na?","What time is it?"],
+      ["Mahirap ito","This is difficult"],
+      ["Balik ka ulit","Come back again"],
+      ["Magkita tayo ulit","See you again"],
+      ["Aalis na ako","I'm leaving now"],
+      ["Taga-saan ka?","Where are you from?"],
+      ["Maingay","Noisy"],
+      ["Saan ka pupunta?","Where are you going?"],
+      ["Akin","Mine"],
+      ["Atin","Our"],
+      ["Puwede bang humiram?","Can I borrow?"],
+    ]},
+    { id: "tl-a5", title: "V. Taste & Weather", icon: "🌶️", hasFormal: false, rows: [
+      ["Mainit ngayon","It's hot today"],
+      ["Malamig ngayon","It's cold today"],
+      ["Matamis ito","This is sweet"],
+      ["Masakit ang ulo ko","I have a headache"],
+      ["Maalat ito","This is salty"],
+      ["Mapait ito","This is bitter"],
+      ["Maasim ito","This is sour"],
+      ["Maanghang ito","This is spicy"],
+      ["Masarap ito","This is delicious"],
+      ["Matabang ito","This is tasteless"],
     ]},
   ],
 };
@@ -246,9 +321,11 @@ function FormalTable({ lesson }) {
           </tr>
         </thead>
         <tbody>
-          {lesson.rows.map((row, i) => (
+          {lesson.rows.map((row, i) => {
+            const hasPo = row[1] && row[1] !== "—";
+            return (
             <>
-              <tr key={i} style={{ borderBottom: expandedRows[i] ? "none" : "1px solid rgba(255,255,255,0.05)" }}>
+              <tr key={i} style={{ borderBottom: expandedRows[i] && hasPo ? "none" : "1px solid rgba(255,255,255,0.05)" }}>
                 {/* Informal */}
                 <td style={{ ...td, color: "#e2e8f0" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -269,6 +346,7 @@ function FormalTable({ lesson }) {
                 </td>
                 {/* Po toggle — mobile only */}
                 <td className="po-toggle-col" style={{ ...td, textAlign: "center", verticalAlign: "middle" }}>
+                  {hasPo && (
                   <button
                     onClick={() => toggleRow(i)}
                     style={{
@@ -285,12 +363,13 @@ function FormalTable({ lesson }) {
                   >
                     {expandedRows[i] ? "po ▲" : "po ▼"}
                   </button>
+                  )}
                 </td>
                 {/* English */}
                 <td style={{ ...td, color: "#94a3b8" }}>{row[2]}</td>
               </tr>
               {/* Expanded formal row — mobile only */}
-              {expandedRows[i] && (
+              {expandedRows[i] && hasPo && (
                 <tr key={`${i}-formal`} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                   <td colSpan={3} style={{ ...td, paddingTop: "0.25rem", paddingBottom: "0.6rem" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#86efac" }}>
@@ -304,7 +383,8 @@ function FormalTable({ lesson }) {
                 </tr>
               )}
             </>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </>

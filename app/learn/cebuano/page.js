@@ -158,7 +158,7 @@ const LESSONS = {
     ]},
     { id: "cb-b3", title: "III. Family Members", icon: "👨‍👩‍👧", hasFormal: false, rows: [
       ["Amahan","Father"],["Inahan","Mother"],["Kuya","Older brother"],
-      ["Ate","Older sister"],["Igsuon","Sibling"],["Lolo","Grandfather"],
+      ["Ate","Older sister"],["Igsuon","Sibling"],["Manghod","Younger sibling"],["Lolo","Grandfather"],
       ["Lola","Grandmother"],["Tito","Uncle"],["Tita","Aunt"],["Anak","Child"],
     ]},
   ],
@@ -195,9 +195,11 @@ const LESSONS = {
       ["Gigutom na ko","I am already hungry"],
       ["Gikapoy na ko","I am already tired"],
       ["Palangga ko ikaw","I love you"],
+      ["Kumusta na man?","How are things?"],
     ]},
     { id: "cb-a3", title: "III. Asking Directions", icon: "🗺️", hasFormal: false, rows: [
       ["Asa ang CR?","Where is the restroom?"],
+      ["Asa man ni?","Where is it?"],
       ["Unsaon pagadto sa?","How do I get to ___?"],
       ["Liko sa wala","Turn left"],
       ["Liko sa tuo","Turn right"],
