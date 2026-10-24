@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { pageMetadata } from "../../../lib/seo";
 
-export const metadata = {
-  title: "20 Tagalog Phrases Every Tourist Needs | talkaPH Blog",
+export const metadata = pageMetadata({
+  title: "20 Tagalog Phrases Every Tourist Needs",
   description:
     "The essential Tagalog phrases for your first trip to the Philippines — greetings, ordering food, haggling, and getting around, with pronunciation guides from a native Filipino speaker.",
-};
+  path: "/blog/tagalog-phrases-for-tourists",
+  type: "article",
+});
 
 function Phrase({ tagalog, pron, meaning }) {
   return (

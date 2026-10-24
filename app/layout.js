@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ADSENSE_CLIENT, DEFAULT_DESCRIPTION, DEFAULT_TITLE, SITE_NAME, SITE_URL } from "../lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,15 +12,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "talkaPH — Learn Filipino Languages Free | Tagalog, Cebuano, Ilonggo",
-  description: "Learn Tagalog, Cebuano and Ilonggo free with native Filipino audio. 270+ phrases for travelers to the Philippines. Greetings, food, directions and more.",
-  keywords: "learn Filipino, learn Tagalog, learn Cebuano, learn Ilonggo, Filipino language, Philippines travel, Bisaya phrases, Hiligaynon",
-  openGraph: {
-    title: "talkaPH — Learn Filipino Languages Free",
-    description: "Learn Tagalog, Cebuano and Ilonggo with native Filipino audio. Free for travelers to the Philippines.",
-    url: "https://talkaph.com",
-    siteName: "talkaPH",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: DEFAULT_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords:
+    "learn Filipino, learn Tagalog, learn Cebuano, learn Ilonggo, Filipino language, Philippines travel, Bisaya phrases, Hiligaynon",
+  // No openGraph.url and no canonical on the root. A child openGraph object
+  // replaces the parent, and a shared og:url made every page share as the homepage.
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "en_US",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+  },
+  robots: { index: true, follow: true },
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -29,6 +45,9 @@ export const metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
+  other: {
+    "google-adsense-account": ADSENSE_CLIENT,
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -50,7 +69,7 @@ export default function RootLayout({ children }) {
         {/* Google AdSense */}
         <script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6818717676578570"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
           crossOrigin="anonymous"
         />
       </head>

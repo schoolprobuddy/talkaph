@@ -1,4 +1,14 @@
 import Link from "next/link";
+import { pageMetadata } from "../../lib/seo";
+import { BRAND_TAGLINE, SITE_NAME } from "../../lib/site";
+
+export const metadata = pageMetadata({
+  title: `About ${SITE_NAME} — ${BRAND_TAGLINE}`,
+  absoluteTitle: true,
+  description:
+    "Why talkaPH exists: a native speaker teaching Tagalog, Cebuano, and Ilonggo the way they're really spoken, with free native audio.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

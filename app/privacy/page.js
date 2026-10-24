@@ -1,4 +1,12 @@
 import Link from "next/link";
+import { pageMetadata } from "../../lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Privacy Policy",
+  description:
+    "How talkaPH handles your data, cookies, Google AdSense, and affiliate links. No account is needed to learn.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (
