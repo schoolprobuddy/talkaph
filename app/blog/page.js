@@ -10,6 +10,39 @@ export const metadata = pageMetadata({
 
 const POSTS = [
   {
+    slug: "cebuano-phrases-for-cebu-trip",
+    category: "Travel",
+    color: "#2dd4bf",
+    icon: "🏝️",
+    title: "Cebuano Phrases for Your Cebu Trip (Bisaya Basics)",
+    excerpt:
+      "Heading to Cebu? Learn 30+ Cebuano (Bisaya) phrases for greetings, markets, jeepneys and food, with pronunciation and free native audio.",
+    date: "October 2026",
+    readTime: "7 min read",
+  },
+  {
+    slug: "ilonggo-phrases-iloilo-bacolod",
+    category: "Travel",
+    color: "#fb7185",
+    icon: "🌺",
+    title: "Ilonggo Phrases for Iloilo and Bacolod Travellers",
+    excerpt:
+      "Visiting Iloilo or Bacolod? Learn 30+ Ilonggo (Hiligaynon) phrases for greetings, food, markets and directions, with pronunciation and free audio.",
+    date: "October 2026",
+    readTime: "6 min read",
+  },
+  {
+    slug: "tagalog-phrases-for-ofw-families",
+    category: "Family",
+    color: "#fbbf24",
+    icon: "💛",
+    title: "Tagalog Phrases for OFW Families and Kids Abroad",
+    excerpt:
+      "Grew up abroad or married into a Filipino family? Learn warm Tagalog phrases for video calls, visits and family gatherings, with free native audio.",
+    date: "October 2026",
+    readTime: "7 min read",
+  },
+  {
     slug: "tagalog-phrases-for-tourists",
     category: "Travel",
     color: "#3b82f6",
