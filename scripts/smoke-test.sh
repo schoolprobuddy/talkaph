@@ -42,6 +42,9 @@ PAGES=(
   /about
   /blog
   /blog/tagalog-phrases-for-tourists
+  /blog/tagalog-phrases-for-ofw-families
+  /blog/cebuano-phrases-for-cebu-trip
+  /blog/ilonggo-phrases-iloilo-bacolod
   /contribute
   /learn
   /learn/cebuano
@@ -92,6 +95,9 @@ for loc in \
   "https://talkaph.com/about" \
   "https://talkaph.com/blog" \
   "https://talkaph.com/blog/tagalog-phrases-for-tourists" \
+  "https://talkaph.com/blog/tagalog-phrases-for-ofw-families" \
+  "https://talkaph.com/blog/cebuano-phrases-for-cebu-trip" \
+  "https://talkaph.com/blog/ilonggo-phrases-iloilo-bacolod" \
   "https://talkaph.com/contribute" \
   "https://talkaph.com/learn" \
   "https://talkaph.com/learn/cebuano" \
@@ -154,7 +160,11 @@ check_page_tags() { # path expected_canonical expect_noindex(0/1)
 check_page_tags / "https://talkaph.com" 0
 check_page_tags /about "https://talkaph.com/about" 0
 check_page_tags /learn/tagalog "https://talkaph.com/learn/tagalog" 0
+check_page_tags /blog "https://talkaph.com/blog" 0
 check_page_tags /blog/tagalog-phrases-for-tourists "https://talkaph.com/blog/tagalog-phrases-for-tourists" 0
+check_page_tags /blog/tagalog-phrases-for-ofw-families "https://talkaph.com/blog/tagalog-phrases-for-ofw-families" 0
+check_page_tags /blog/cebuano-phrases-for-cebu-trip "https://talkaph.com/blog/cebuano-phrases-for-cebu-trip" 0
+check_page_tags /blog/ilonggo-phrases-iloilo-bacolod "https://talkaph.com/blog/ilonggo-phrases-iloilo-bacolod" 0
 check_page_tags /contribute "https://talkaph.com/contribute" 0
 check_page_tags /record "https://talkaph.com/record" 1
 
@@ -203,6 +213,9 @@ check_redir /about/ 308 /about
 check_redir "/about/?x=1" 308 "/about?x=1"
 check_redir /learn/tagalog/ 308 /learn/tagalog
 check_redir "/blog/tagalog-phrases-for-tourists/?q=1" 308 "/blog/tagalog-phrases-for-tourists?q=1"
+check_redir /blog/tagalog-phrases-for-ofw-families/ 308 /blog/tagalog-phrases-for-ofw-families
+check_redir "/blog/cebuano-phrases-for-cebu-trip/?q=1" 308 "/blog/cebuano-phrases-for-cebu-trip?q=1"
+check_redir /blog/ilonggo-phrases-iloilo-bacolod/ 308 /blog/ilonggo-phrases-iloilo-bacolod
 check_redir /record-cebuano/ 308 /record-cebuano
 
 # Cache headers from public/_headers.
@@ -239,7 +252,11 @@ fi
 check /about.txt 200 text/plain
 check /learn.txt 200 text/plain
 check /learn/tagalog.txt 200 text/plain
+check /blog.txt 200 text/plain
 check /blog/tagalog-phrases-for-tourists.txt 200 text/plain
+check /blog/tagalog-phrases-for-ofw-families.txt 200 text/plain
+check /blog/cebuano-phrases-for-cebu-trip.txt 200 text/plain
+check /blog/ilonggo-phrases-iloilo-bacolod.txt 200 text/plain
 check /contribute.txt 200 text/plain
 check /index.txt 200 text/plain
 check /__next._head.txt 200 text/plain
