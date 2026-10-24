@@ -113,7 +113,6 @@ export default function Page() {
         <Phrase tagalog="Kamusta ka?" pron="kah-MOOS-tah kah" meaning="How are you? (to one person)" />
         <Phrase tagalog="Kamusta kamo?" pron="kah-MOOS-tah kah-MOH" meaning="How are you? (to a group)" />
         <Phrase tagalog="Salamat / Salamat gid" pron="sah-LAH-mat / sah-LAH-mat GEED" meaning="Thank you / Thank you so much" />
-        <Phrase tagalog="Wala sang anuman [CHECK]" pron="wah-LAH sang ah-noo-MAN" meaning="You're welcome" />
         <Phrase tagalog="Oo / Indi" pron="OH-oh / in-DEE" meaning="Yes / No" />
         <Phrase tagalog="Palihog" pron="pah-LEE-hog" meaning="Please" />
         <p style={P}>
@@ -157,7 +156,7 @@ export default function Page() {
           {" to the cook will earn you a friend for life."}
         </p>
         <SectionHeading icon="🛍️">{"At the market"}</SectionHeading>
-        <Phrase tagalog="Tagpila ini? [CHECK]" pron="tag-PEE-lah ee-NEE" meaning="How much is this?" />
+        <Phrase tagalog="Tagpila ini?" pron="tag-PEE-lah ee-NEE" meaning="How much is this?" />
         <Phrase tagalog="Mahal gid" pron="mah-HAL GEED" meaning="That's really expensive" />
         <Phrase tagalog="Isa, duha, tatlo" pron="ee-SAH, DOO-hah, tat-LOH" meaning="One, two, three" />
         <Phrase tagalog="Sige" pron="SEE-geh" meaning="Okay / Sure" />
@@ -177,7 +176,7 @@ export default function Page() {
         <Phrase tagalog="Diretso lang" pron="dee-RET-soh lang" meaning="Go straight" />
         <Phrase tagalog="Malapit lang" pron="mah-LAH-pit lang" meaning="It's just nearby" />
         <Phrase tagalog="Ano ka layo?" pron="ah-NOH kah LAH-yoh" meaning="How far is it?" />
-        <Phrase tagalog="Lugar lang [CHECK]" pron="loo-GAR lang" meaning="Stop here, please (jeepney or taxi)" />
+        <Phrase tagalog="Lugar lang" pron="loo-GAR lang" meaning="Stop here, please (jeepney or taxi)" />
         <p style={P}>
           {"Iloilo's jeepneys have their own distinctive look, and locals are rightly proud of them. When you want to get off, "}
           <em>{"lugar lang"}</em>
@@ -193,7 +192,7 @@ export default function Page() {
         <Phrase tagalog="Taga diin ka?" pron="tah-gah dee-IN kah" meaning="Where are you from?" />
         <Phrase tagalog="Taga-___ ako" pron="TAH-gah ___ ah-KOH" meaning="I'm from ___" />
         <Phrase tagalog="Nalipay ako nga nakilala ta ka" pron="nah-LEE-pai ah-KOH ngah nah-kee-LAH-lah tah kah" meaning="Nice to meet you" />
-        <Phrase tagalog="Indi ko kabalo mag-Ilonggo [CHECK]" pron="in-DEE koh kah-BAH-loh mag-ee-LONG-goh" meaning="I don't know how to speak Ilonggo" />
+        <Phrase tagalog="Indi ko kabalo mag-Ilonggo" pron="in-DEE koh kah-BAH-loh mag-ee-LONG-goh" meaning="I don't know how to speak Ilonggo" />
         <Phrase tagalog="Wala ako kahibalo" pron="wah-LAH ah-KOH kah-hee-BAH-loh" meaning="I don't know" />
         <Phrase tagalog="Lakat ta" pron="LAH-kat tah" meaning="Let's go" />
         <p style={P}>
@@ -235,8 +234,7 @@ export default function Page() {
           <em>{"\"Namit gid!\""}</em>
           {" When it's time to pay, ask "}
           <em>{"\"Tagpila ini?\""}</em>
-          {" "}
-          {"[CHECK], then finish with a warm "}
+          {", then finish with a warm "}
           <em>{"\"Salamat gid.\""}</em>
           {" Expect a "}
           <em>{"\"Halong ka!\""}</em>

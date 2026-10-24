@@ -120,7 +120,6 @@ export default function Page() {
         <SectionHeading icon="🛍️">{"At the market and the sari-sari store"}</SectionHeading>
         <Phrase tagalog="Tagpila ni?" pron="tag-PEE-lah nee" meaning="How much is this?" />
         <Phrase tagalog="Mahal kaayo" pron="mah-HAL ka-AH-yo" meaning="That's very expensive" />
-        <Phrase tagalog="Pwede hangyo? [CHECK]" pron="PWEH-deh hang-YO" meaning="Can I ask for a discount?" />
         <Phrase tagalog="Usa, duha, tulo" pron="OO-sah, DOO-hah, TOO-loh" meaning="One, two, three" />
         <Phrase tagalog="Sige" pron="SEE-geh" meaning="Okay / Sure" />
         <p style={P}>
@@ -167,7 +166,7 @@ export default function Page() {
         <Phrase tagalog="Diretso lang" pron="dee-RET-soh lang" meaning="Go straight" />
         <Phrase tagalog="Duol lang" pron="doo-OL lang" meaning="It's just nearby" />
         <Phrase tagalog="Layo ba?" pron="LAH-yoh bah" meaning="Is it far?" />
-        <Phrase tagalog="Lugar lang [CHECK]" pron="loo-GAR lang" meaning="Stop here, please (on a jeepney)" />
+        <Phrase tagalog="Lugar lang" pron="loo-GAR lang" meaning="Stop here, please (on a jeepney)" />
         <p style={P}>
           <strong style={{ color: "#fff" }}>{"Lugar lang"}</strong>
           {" is the Cebu way of asking a jeepney or taxi to stop. In Manila you'd shout \"para po!\", and that's understood in Cebu too, but "}
@@ -187,7 +186,7 @@ export default function Page() {
         <Phrase tagalog="Gikan ko sa ___" pron="GEE-kan koh sah" meaning="I'm from ___" />
         <Phrase tagalog="Nalipay ko nga nakaila nimo" pron="nah-LEE-pai koh ngah nah-ka-EE-lah NEE-moh" meaning="Nice to meet you" />
         <Phrase tagalog="Wala ko kahibalo" pron="wah-LAH koh ka-hee-BAH-loh" meaning="I don't know" />
-        <Phrase tagalog="Gamay ra akong Bisaya [CHECK]" pron="gah-MAI rah AH-kong bee-SAH-yah" meaning="I only speak a little Bisaya" />
+        <Phrase tagalog="Gamay ra akong Bisaya" pron="gah-MAI rah AH-kong bee-SAH-yah" meaning="I only speak a little Bisaya" />
         <Phrase tagalog="Lakaw ta" pron="LAH-kaw tah" meaning="Let's go" />
         <p style={P}>
           <em>{"Taga asa ka?"}</em>
