@@ -5,8 +5,8 @@ import Link from "next/link";
 // All phrases across all 3 languages for cross-language search
 const ALL_PHRASES = [
   // TAGALOG - Greetings
-  { tl: "Kamusta ka?", en: "How are you?", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_001_kamusta_ka.mp3" },
-  { tl: "Kamusta po kayo?", en: "How are you? (formal)", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_001_kamusta_po_kayo.mp3" },
+  { tl: "Kumusta ka?", en: "How are you?", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_001_kamusta_ka.mp3" },
+  { tl: "Kumusta po kayo?", en: "How are you? (formal)", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_001_kamusta_po_kayo.mp3" },
   { tl: "Magandang umaga", en: "Good morning", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_004_magandang_umaga.mp3" },
   { tl: "Magandang tanghali", en: "Good noon", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_006_magandang_tanghali.mp3" },
   { tl: "Magandang hapon", en: "Good afternoon", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_008_magandang_hapon.mp3" },

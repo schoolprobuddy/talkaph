@@ -3,8 +3,8 @@ import { useState } from "react";
 import Link from "next/link";
 
 const AUDIO = {
-  "Kamusta ka?": "tl_001_kamusta_ka.mp3",
-  "Kamusta po kayo?": "fix_001_kamusta_po_kayo.mp3",
+  "Kumusta ka?": "tl_001_kamusta_ka.mp3",
+  "Kumusta po kayo?": "fix_001_kamusta_po_kayo.mp3",
   "Magandang umaga": "tl_004_magandang_umaga.mp3",
   "Magandang umaga po": "tl_005_magandang_umaga_po.mp3",
   "Magandang tanghali": "tl_006_magandang_tanghali.mp3",
@@ -175,7 +175,7 @@ function playAudio(phrase) {
 const LESSONS = {
   basics: [
     { id: "tl-b1", title: "I. Greetings", icon: "👋", hasFormal: true, rows: [
-      ["Kamusta ka?","Kamusta po kayo?","How are you?"],
+      ["Kumusta ka?","Kumusta po kayo?","How are you?"],
       ["Magandang umaga","Magandang umaga po","Good morning"],
       ["Magandang tanghali","Magandang tanghali po","Good noon"],
       ["Magandang hapon","Magandang hapon po","Good afternoon"],
