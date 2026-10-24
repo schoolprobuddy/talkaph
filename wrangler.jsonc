@@ -1,0 +1,14 @@
+// Assets only: no Worker script, so requests are not billed as Worker invocations.
+// Free plan. Do not add a "main" entry or run_worker_first.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "talkaph",
+  "compatibility_date": "2026-10-24",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "workers_dev": true,
+  "preview_urls": true
+}
