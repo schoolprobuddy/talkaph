@@ -1,4 +1,13 @@
 import Link from "next/link";
+import { pageMetadata } from "../lib/seo";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from "../lib/site";
+
+export const metadata = pageMetadata({
+  title: DEFAULT_TITLE,
+  absoluteTitle: true,
+  description: DEFAULT_DESCRIPTION,
+  path: "/",
+});
 
 export default function Home() {
   return (

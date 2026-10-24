@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { pageMetadata } from "../../lib/seo";
 
-export const metadata = {
-  title: "Blog | talkaPH — Learn Filipino Languages Free",
+export const metadata = pageMetadata({
+  title: "Filipino Language & Travel Blog",
   description:
     "Tips, culture, and guides for learning Tagalog, Cebuano, and Ilonggo — written by a native Filipino speaker.",
-};
+  path: "/blog",
+});
 
 const POSTS = [
   {
