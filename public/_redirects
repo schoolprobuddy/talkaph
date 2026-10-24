@@ -1,0 +1,19 @@
+# Cloudflare applies these before static files. Vercel ignores this file.
+# html_handling already redirects a trailing slash to the clean URL, but with
+# 307. These rules make that redirect 308, matching talkaph.com on Vercel.
+# Placeholders cover nested pages added later (including the blog posts on
+# PR #3) without listing each slug.
+# www → apex cannot be done here. That is a Cloudflare Redirect Rule at cutover.
+
+/about/                                /about                                308
+/blog/                                 /blog                                 308
+/contribute/                           /contribute                           308
+/learn/                                /learn                                308
+/privacy/                              /privacy                              308
+/record/                               /record                               308
+/record-cebuano/                       /record-cebuano                       308
+/record-tagalog/                       /record-tagalog                       308
+
+/learn/:lang/                          /learn/:lang                          308
+/blog/:slug/                           /blog/:slug                           308
+/:one/:two/:three/                     /:one/:two/:three                     308
