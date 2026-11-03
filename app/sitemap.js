@@ -9,6 +9,7 @@ export const dynamic = "force-static";
  * and the rest) are sections inside /learn/tagalog, /learn/cebuano, and
  * /learn/ilonggo — they are not separate routes, so they are not listed again.
  * Recording tools under /record are private and excluded.
+ * The practice app at /app is a noindex PWA shell and is excluded too.
  */
 export default function sitemap() {
   return discoverPublicPages().map((page) => ({

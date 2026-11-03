@@ -269,6 +269,78 @@ echo "INFO /about.html -> ${html_redir:-no redirect} (Cloudflare static assets: 
 index_redir=$(curl -s -D - -o /dev/null "$BASE/index.html" | tr -d '\r' | awk 'BEGIN{c=""} /^HTTP/{c=$2} tolower($1)=="location:"{loc=$2} END{print c, loc}')
 echo "INFO /index.html -> ${index_redir:-no redirect} (Cloudflare static assets: 307 /; Vercel today: 404)"
 
+# Practice app: Tagalog PWA shell at /app. noindex, and not an SEO URL.
+check /app 200 text/html
+check /app/manifest.webmanifest 200 manifest
+check /sw.js 200 javascript
+check /android-chrome-192x192.png 200 image/png
+check /android-chrome-512x512.png 200 image/png
+
+app_html=$(curl -s "$BASE/app")
+for bit in \
+  "/app/manifest.webmanifest" \
+  "apple-mobile-web-app-capable" \
+  "apple-touch-icon" \
+  "noindex" \
+  "Practice Tagalog" \
+  "Coming soon" \
+  "Download Tagalog for offline" \
+  "Phrasebook" \
+  "Cebuano" \
+  "Ilonggo"
+do
+  if [[ "$app_html" == *"$bit"* ]]; then
+    echo "PASS /app contains $bit"
+    pass=$((pass+1))
+  else
+    echo "FAIL /app missing $bit"
+    fail=$((fail+1))
+  fi
+done
+
+if printf '%s' "$sitemap" | grep -q '<loc>https://talkaph.com/app'; then
+  echo "FAIL sitemap lists /app"
+  fail=$((fail+1))
+else
+  echo "PASS sitemap omits /app"
+  pass=$((pass+1))
+fi
+
+man=$(curl -s "$BASE/app/manifest.webmanifest")
+if printf '%s' "$man" | node -e '
+  let raw = "";
+  process.stdin.on("data", (chunk) => { raw += chunk; });
+  process.stdin.on("end", () => {
+    const manifest = JSON.parse(raw);
+    const icons = manifest.icons || [];
+    const ok = manifest.name === "talkaPH"
+      && manifest.short_name === "talkaPH"
+      && manifest.scope === "/app"
+      && manifest.start_url === "/app"
+      && manifest.display === "standalone"
+      && icons.some((icon) => String(icon.sizes || "").includes("192") && String(icon.src || "").includes("android-chrome-192x192.png"))
+      && icons.some((icon) => String(icon.sizes || "").includes("512") && String(icon.src || "").includes("android-chrome-512x512.png"));
+    process.exit(ok ? 0 : 1);
+  });
+'; then
+  echo "PASS /app manifest scope, start_url, display, icons"
+  pass=$((pass+1))
+else
+  echo "FAIL /app manifest JSON"
+  fail=$((fail+1))
+fi
+
+sw=$(curl -s "$BASE/sw.js")
+if [[ "$sw" == *'addEventListener("fetch"'* && "$sw" == *"caches"* && "$sw" == *".mp3"* ]]; then
+  echo "PASS /sw.js fetch handler caches audio"
+  pass=$((pass+1))
+else
+  echo "FAIL /sw.js is missing the offline fetch handler"
+  fail=$((fail+1))
+fi
+
+check_redir /app/ 308 /app
+
 # Hashed JS should be immutable. Discover one file from the homepage.
 asset=$(curl -s "$BASE/" | grep -oE '/_next/static/[^"]+\.js' | head -1)
 if [ -n "$asset" ]; then
