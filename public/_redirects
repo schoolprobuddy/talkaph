@@ -6,6 +6,7 @@
 # www → apex cannot be done here. That is a Cloudflare Redirect Rule at cutover.
 
 /about/                                /about                                308
+/app/                                  /app                                  308
 /blog/                                 /blog                                 308
 /contribute/                           /contribute                           308
 /learn/                                /learn                                308

@@ -1,60 +1,11 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { TAGALOG_SEARCH_PHRASES } from "../../lib/phrases/search";
 
 // All phrases across all 3 languages for cross-language search
 const ALL_PHRASES = [
-  // TAGALOG - Greetings
-  { tl: "Kumusta ka?", en: "How are you?", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_001_kamusta_ka.mp3" },
-  { tl: "Kumusta po kayo?", en: "How are you? (formal)", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_001_kamusta_po_kayo.mp3" },
-  { tl: "Magandang umaga", en: "Good morning", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_004_magandang_umaga.mp3" },
-  { tl: "Magandang tanghali", en: "Good noon", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_006_magandang_tanghali.mp3" },
-  { tl: "Magandang hapon", en: "Good afternoon", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_008_magandang_hapon.mp3" },
-  { tl: "Magandang gabi", en: "Good evening", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_010_magandang_gabi.mp3" },
-  { tl: "Salamat", en: "Thank you", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_012_salamat.mp3" },
-  { tl: "Maraming salamat", en: "Thank you very much", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_014_maraming_salamat.mp3" },
-  { tl: "Paalam", en: "Goodbye", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_016_paalam.mp3" },
-  { tl: "Oo", en: "Yes", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_018_oo.mp3" },
-  { tl: "Opo", en: "Yes (formal)", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_003_opo.mp3" },
-  { tl: "Hindi", en: "No", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_020_hindi.mp3" },
-  { tl: "Ingat ka", en: "Take care", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_060_ingat_ka.mp3" },
-  { tl: "Maligayang kaarawan", en: "Happy birthday", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_028_maligayang_kaarawan.mp3" },
-  { tl: "Pasensya na", en: "I am sorry", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_043_pasensya_na.mp3" },
-  { tl: "Tuloy ka", en: "Please come in", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_047_tuloy_ka.mp3" },
-  // TAGALOG - Numbers
-  { tl: "Isa", en: "One", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_007_isa.mp3" },
-  { tl: "Dalawa", en: "Two", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_008_dalawa.mp3" },
-  { tl: "Tatlo", en: "Three", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_009_tatlo.mp3" },
-  { tl: "Apat", en: "Four", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_010_apat.mp3" },
-  { tl: "Lima", en: "Five", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_011_lima.mp3" },
-  { tl: "Anim", en: "Six", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_012_anim.mp3" },
-  { tl: "Pito", en: "Seven", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_013_pito.mp3" },
-  { tl: "Walo", en: "Eight", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_014_walo.mp3" },
-  { tl: "Siyam", en: "Nine", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_015_siyam.mp3" },
-  { tl: "Sampu", en: "Ten", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_016_sampu.mp3" },
-  // TAGALOG - Family
-  { tl: "Ama / Tatay", en: "Father", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_017_ama_tatay.mp3" },
-  { tl: "Ina / Nanay", en: "Mother", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_018_ina_nanay.mp3" },
-  { tl: "Kuya", en: "Older brother", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_019_kuya.mp3" },
-  { tl: "Ate", en: "Older sister", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_020_ate.mp3" },
-  { tl: "Lolo", en: "Grandfather", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_fam_lolo.mp3" },
-  { tl: "Lola", en: "Grandmother", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_fam_lola.mp3" },
-  // TAGALOG - Food
-  { tl: "Kanin", en: "Cooked rice", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_food_001_kanin.mp3" },
-  { tl: "Tubig", en: "Water", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_food_002_tubig.mp3" },
-  { tl: "Manok", en: "Chicken", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_074_manok.mp3" },
-  { tl: "Baboy", en: "Pork", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_075_baboy.mp3" },
-  { tl: "Isda", en: "Fish", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_food_004_isda.mp3" },
-  { tl: "Kape", en: "Coffee", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_food_009_kape.mp3" },
-  // TAGALOG - Expressions
-  { tl: "Sige", en: "Okay / Sure", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_055_sige.mp3" },
-  { tl: "Ay nako!", en: "Oh my! (surprise)", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "fix_056_ay_nako.mp3" },
-  { tl: "Gutom na ako", en: "I am already hungry", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_139_gutom_na_ako.mp3" },
-  { tl: "Pagod na ako", en: "I am already tired", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_140_pagod_na_ako.mp3" },
-  { tl: "Mahal kita", en: "I love you", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "tl_141_mahal_kita.mp3" },
-  { tl: "Diretso lang", en: "Go straight", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_dir_diretso.mp3" },
-  { tl: "Lumiko sa kaliwa", en: "Turn left", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_dir_kaliwa.mp3" },
-  { tl: "Lumiko sa kanan", en: "Turn right", lang: "Tagalog", langColor: "#3b82f6", href: "/learn/tagalog", audio: "new_tl_dir_kanan.mp3" },
+  ...TAGALOG_SEARCH_PHRASES,
   // CEBUANO - Greetings
   { tl: "Kumusta ka?", en: "How are you?", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "cb_142_kumusta_ka.mp3" },
   { tl: "Maayong buntag", en: "Good morning", lang: "Cebuano", langColor: "#10b981", href: "/learn/cebuano", audio: "fix_061_maayong_buntag.mp3" },

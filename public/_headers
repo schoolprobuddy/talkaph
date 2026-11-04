@@ -19,6 +19,15 @@
 /site.webmanifest
   Cache-Control: public, max-age=86400
   Content-Type: application/manifest+json
+/app/manifest.webmanifest
+  Cache-Control: public, max-age=86400
+  Content-Type: application/manifest+json
+/manifest.webmanifest
+  Cache-Control: public, max-age=86400
+  Content-Type: application/manifest+json
+/sw.js
+  Cache-Control: no-cache
+  Content-Type: application/javascript; charset=utf-8
 
 # This site has no generated /opengraph-image file. Social tags are title,
 # description, and og:url only.

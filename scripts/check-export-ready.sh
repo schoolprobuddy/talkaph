@@ -50,7 +50,7 @@ if [ -d app ] && [ -d public ]; then
       missing=$((missing+1))
       fail=$((fail+1))
     fi
-  done < <(grep -RhoE '[A-Za-z0-9_.-]+\.mp3' app --include='*.js' --include='*.jsx' --include='*.ts' --include='*.tsx' | sort -u)
+  done < <(grep -RhoE '[A-Za-z0-9_.-]+\.mp3' app lib --include='*.js' --include='*.jsx' --include='*.ts' --include='*.tsx' | sort -u)
   echo "Audio references checked. Missing files: $missing"
 fi
 
