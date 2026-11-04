@@ -6,26 +6,31 @@ import {
   APP_LANGUAGES,
   PHRASE_TABS,
   buildExercises,
+  courses,
+  findLesson,
+  phrasesById,
   pickReviewPhrases,
   summarizeSession,
-  tagalogCourse,
 } from "../../lib/phrases";
-import { downloadTagalogOffline } from "../../lib/offline";
+import { APP_VERSION } from "../../lib/version";
+import { downloadLanguageOffline } from "../../lib/offline";
 import {
   addMinutes,
+  emptyProfile,
   exportProgress,
   gradePhrase,
   importProgress,
   isDue,
   loadProgress,
   localDate,
-  markActive,
+  markLanguageActive,
   savePhraseProgress,
   saveProfile,
+  updateLanguage,
 } from "../../lib/progress";
 
-const course = tagalogCourse;
-const phraseById = new Map(course.phrases.map((phrase) => [phrase.id, phrase]));
+const phraseById = phrasesById;
+const FEEDBACK_MAIL = `mailto:hello@talkaph.com?subject=${encodeURIComponent(`talkaPH beta ${APP_VERSION} feedback`)}`;
 
 let currentAudio = null;
 function playFile(filename) {
@@ -58,7 +63,6 @@ export default function PracticeApp() {
   const [phraseProgress, setPhraseProgress] = useState({});
   const [ready, setReady] = useState(false);
   const [today, setToday] = useState("");
-  const [soon, setSoon] = useState(null);
   const [download, setDownload] = useState({ state: "idle", pct: 0, error: "" });
   const [session, setSession] = useState(null);
   const profileRef = useRef(null);
@@ -92,7 +96,17 @@ export default function PracticeApp() {
 
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
+    let hadController = Boolean(navigator.serviceWorker.controller);
+    const onChange = () => {
+      if (!hadController) {
+        hadController = true;
+        return;
+      }
+      window.location.reload();
+    };
+    navigator.serviceWorker.addEventListener("controllerchange", onChange);
     navigator.serviceWorker.register("/sw.js", { scope: "/", updateViaCache: "none" }).catch(() => {});
+    return () => navigator.serviceWorker.removeEventListener("controllerchange", onChange);
   }, []);
 
   function commitProfile(updater) {
@@ -123,9 +137,13 @@ export default function PracticeApp() {
     else window.location.hash = next;
   }
 
+  const lang = activeProfile.activeLang || "tagalog";
+  const course = courses[lang];
+  const langProfile = activeProfile.languages[lang];
+
   function openLesson(lesson) {
     if (!ready) return;
-    const unlocked = isLessonUnlocked(lesson, activeProfile.completedLessons);
+    const unlocked = isLessonUnlocked(lesson, langProfile.completedLessons, course.lessons);
     if (!unlocked) return;
     go(`/lesson/${lesson.id}`);
   }
@@ -138,12 +156,18 @@ export default function PracticeApp() {
   function finishSession(kind, title, lessonId, events, elapsedMin) {
     const summary = summarizeSession(events, kind === "lesson" ? 20 : 10);
     const day = localDate();
+    const practiceLang = kind === "lesson" ? findLesson(lessonId)?.lesson.lang || lang : lang;
     commitProfile((prev) => {
-      let next = markActive(addMinutes(prev, day, elapsedMin), day);
-      next = { ...next, xp: next.xp + summary.xp };
-      if (kind === "lesson" && lessonId && !next.completedLessons.includes(lessonId)) {
-        next = { ...next, completedLessons: [...next.completedLessons, lessonId] };
-      }
+      let next = addMinutes(prev, day, elapsedMin);
+      next = markLanguageActive(next, practiceLang, day);
+      next = updateLanguage(next, practiceLang, (current) => ({
+        ...current,
+        xp: current.xp + summary.xp,
+        completedLessons:
+          kind === "lesson" && lessonId && !current.completedLessons.includes(lessonId)
+            ? [...current.completedLessons, lessonId]
+            : current.completedLessons,
+      }));
       return next;
     });
     setSession({ ...summary, elapsedMin, title, kind });
@@ -153,7 +177,7 @@ export default function PracticeApp() {
   const due = useMemo(() => {
     if (!today) return [];
     return course.phrases.filter((phrase) => isDue(phraseProgress[phrase.id], today));
-  }, [phraseProgress, today]);
+  }, [course, phraseProgress, today]);
 
   const showNav = view.name !== "lesson" && view.name !== "review";
   const minutes = today ? activeProfile.minutesByDate[today] || 0 : 0;
@@ -165,13 +189,15 @@ export default function PracticeApp() {
         {view.name === "map" && (
           <CourseMap
             profile={activeProfile}
+            langProfile={langProfile}
+            course={course}
             minutes={minutes}
             dueCount={due.length}
             download={download}
             onGoal={(minutesGoal) => commitProfile((prev) => ({ ...prev, dailyGoalMin: minutesGoal }))}
             onOpenLesson={openLesson}
-            onDownload={() => startDownload(setDownload, commitProfile)}
-            onSoon={setSoon}
+            onDownload={() => startDownload(lang, course, setDownload, commitProfile)}
+            onSelectLanguage={(id) => commitProfile((prev) => ({ ...prev, activeLang: id }))}
             onNavigate={go}
           />
         )}
@@ -192,6 +218,7 @@ export default function PracticeApp() {
             due={due}
             ready={ready}
             today={today || localDate()}
+            course={course}
             onExit={leaveSession}
             onFinish={(events, elapsedMin) => finishSession("review", "Review", null, events, elapsedMin)}
             onGrade={commitGrades}
@@ -199,13 +226,20 @@ export default function PracticeApp() {
         )}
         {view.name === "phrasebook" && (
           <Phrasebook
-            favourites={activeProfile.favourites}
+            course={course}
+            favourites={langProfile.favourites}
             onToggle={(id) =>
               commitProfile((prev) => ({
                 ...prev,
-                favourites: prev.favourites.includes(id)
-                  ? prev.favourites.filter((item) => item !== id)
-                  : [...prev.favourites, id],
+                languages: {
+                  ...prev.languages,
+                  [lang]: {
+                    ...prev.languages[lang],
+                    favourites: prev.languages[lang].favourites.includes(id)
+                      ? prev.languages[lang].favourites.filter((item) => item !== id)
+                      : [...prev.languages[lang].favourites, id],
+                  },
+                },
               }))
             }
           />
@@ -213,6 +247,8 @@ export default function PracticeApp() {
         {view.name === "more" && (
           <MoreScreen
             profile={activeProfile}
+            langProfile={langProfile}
+            course={course}
             minutes={minutes}
             onGoal={(minutesGoal) => commitProfile((prev) => ({ ...prev, dailyGoalMin: minutesGoal }))}
             onImported={(next) => {
@@ -228,25 +264,12 @@ export default function PracticeApp() {
           <CompleteScreen
             result={session}
             profile={activeProfile}
+            langProfile={langProfile}
             minutes={minutes}
             onMap={() => go("/")}
             onReview={() => go("/review")}
             dueCount={due.length}
           />
-        )}
-        {soon && (
-          <div style={modalBackdrop} role="dialog" aria-modal="true" aria-labelledby="soon-title">
-            <div style={modalCard}>
-              <p style={kicker}>Coming soon</p>
-              <h2 id="soon-title" style={h2}>
-                {soon.name}
-              </h2>
-              <p style={mutedText}>{soon.description}</p>
-              <button type="button" style={primaryBtn} onClick={() => setSoon(null)}>
-                Back to Tagalog
-              </button>
-            </div>
-          </div>
         )}
         {showNav && <BottomNav view={view.name} dueCount={due.length} onNavigate={go} />}
       </div>
@@ -254,33 +277,21 @@ export default function PracticeApp() {
   );
 }
 
-function emptyProfile() {
-  return {
-    version: 1,
-    xp: 0,
-    streak: 0,
-    lastActive: null,
-    dailyGoalMin: 10,
-    minutesByDate: {},
-    completedLessons: [],
-    favourites: [],
-    offlineReady: false,
-  };
-}
-
-function isLessonUnlocked(lesson, completed) {
+function isLessonUnlocked(lesson, completed, lessons) {
   if (lesson.index === 0) return true;
-  const previous = course.lessons[lesson.index - 1];
+  const previous = lessons[lesson.index - 1];
   return completed.includes(previous.id);
 }
 
-async function startDownload(setDownload, commitProfile) {
+async function startDownload(lang, course, setDownload, commitProfile) {
   setDownload({ state: "working", pct: 0, error: "" });
   try {
-    await downloadTagalogOffline(course.phrases, (pct) => {
+    await downloadLanguageOffline(lang, course.phrases, (pct) => {
       setDownload({ state: "working", pct, error: "" });
     });
-    commitProfile((prev) => ({ ...prev, offlineReady: true }));
+    commitProfile((prev) =>
+      updateLanguage(prev, lang, (current) => ({ ...current, offlineReady: true })),
+    );
     setDownload({ state: "done", pct: 1, error: "" });
   } catch (error) {
     setDownload({
@@ -291,10 +302,11 @@ async function startDownload(setDownload, commitProfile) {
   }
 }
 
-function CourseMap({ profile, minutes, dueCount, download, onGoal, onOpenLesson, onDownload, onSoon, onNavigate }) {
+function CourseMap({ profile, langProfile, course, minutes, dueCount, download, onGoal, onOpenLesson, onDownload, onSelectLanguage, onNavigate }) {
   const goal = profile.dailyGoalMin;
+  const language = APP_LANGUAGES.find((item) => item.id === course.lang);
   const pct = Math.min(100, goal ? (minutes / goal) * 100 : 0);
-  const current = course.lessons.find((lesson) => isLessonUnlocked(lesson, profile.completedLessons) && !profile.completedLessons.includes(lesson.id));
+  const current = course.lessons.find((lesson) => isLessonUnlocked(lesson, langProfile.completedLessons, course.lessons) && !langProfile.completedLessons.includes(lesson.id));
 
   return (
     <main data-screen="map" style={screen}>
@@ -303,12 +315,12 @@ function CourseMap({ profile, minutes, dueCount, download, onGoal, onOpenLesson,
           talka<span style={{ color: "#fbbf24" }}>PH</span>
         </Link>
         <div style={{ display: "flex", gap: 8 }}>
-          <Stat label="Day streak" value={`${profile.streak}`} icon="🔥" />
-          <Stat label="Experience points" value={`${profile.xp}`} icon="✦" />
+          <Stat label="Day streak" value={`${langProfile.streak}`} icon="🔥" />
+          <Stat label="Experience points" value={`${langProfile.xp}`} icon="✦" />
         </div>
       </header>
-      <h1 style={h1}>Practice Tagalog</h1>
-      <p style={{ ...mutedText, marginTop: 0 }}>Native audio. Progress stays on this device.</p>
+      <h1 style={h1}>Practice {language.name}</h1>
+      <p style={{ ...mutedText, marginTop: 0 }}>Native audio. Progress stays on this device, separately for each language.</p>
       <div style={goalCard}>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
           <span style={{ fontWeight: 800 }}>Daily goal</span>
@@ -335,40 +347,38 @@ function CourseMap({ profile, minutes, dueCount, download, onGoal, onOpenLesson,
           ))}
         </div>
       </div>
-      <div style={{ display: "grid", gap: 6 }}>
-        {APP_LANGUAGES.map((language) =>
-          language.available ? (
-            <div key={language.id} style={{ ...langCard, borderColor: "rgba(251,191,36,0.7)" }}>
-              <strong>Tagalog</strong>
-              <span style={tiny}>{language.description}</span>
-            </div>
-          ) : (
+      <div style={{ display: "grid", gap: 6 }} role="group" aria-label="Choose a language">
+        {APP_LANGUAGES.map((item) => {
+          const selected = item.id === course.lang;
+          return (
             <button
-              key={language.id}
+              key={item.id}
               type="button"
-              onClick={() => onSoon(language)}
-              style={{ ...langCard, cursor: "pointer", textAlign: "left" }}
+              data-testid="language"
+              data-lang={item.id}
+              aria-pressed={selected}
+              onClick={() => onSelectLanguage(item.id)}
+              style={{ ...langCard, cursor: "pointer", textAlign: "left", ...(selected ? { borderColor: "rgba(251,191,36,0.7)" } : null) }}
             >
-              <strong>{language.name}</strong>
-              <span style={tiny}>{language.description}</span>
-              <span style={soonBadge}>Coming soon</span>
+              <strong>{item.name}</strong>
+              <span style={tiny}>{item.description}</span>
             </button>
-          ),
-        )}
+          );
+        })}
       </div>
       <button
         type="button"
         data-testid="download-offline"
         onClick={onDownload}
         disabled={download.state === "working"}
-        style={secondaryBtn}
+        style={{ ...secondaryBtn, marginTop: 8 }}
       >
         {download.state === "working"
           ? `Downloading… ${Math.round(download.pct * 100)}%`
-          : "Download Tagalog for offline"}
+          : `Download ${language.name} for offline`}
       </button>
-      {profile.offlineReady && download.state !== "working" && (
-        <p style={{ ...tiny, margin: "8px 0 0" }}>Tagalog audio is saved on this device.</p>
+      {langProfile.offlineReady && download.state !== "working" && (
+        <p style={{ ...tiny, margin: "8px 0 0" }}>{language.name} audio is saved on this device.</p>
       )}
       {download.error && <p style={errorText}>{download.error}</p>}
       <button type="button" onClick={() => onNavigate("/review")} style={reviewRow}>
@@ -392,8 +402,8 @@ function CourseMap({ profile, minutes, dueCount, download, onGoal, onOpenLesson,
                 </h3>
                 <div style={path}>
                   {unit.lessons.map((lesson, index) => {
-                    const unlocked = isLessonUnlocked(lesson, profile.completedLessons);
-                    const done = profile.completedLessons.includes(lesson.id);
+                    const unlocked = isLessonUnlocked(lesson, langProfile.completedLessons, course.lessons);
+                    const done = langProfile.completedLessons.includes(lesson.id);
                     const isCurrent = current && current.id === lesson.id;
                     return (
                       <div key={lesson.id} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -423,6 +433,17 @@ function CourseMap({ profile, minutes, dueCount, download, onGoal, onOpenLesson,
             ))}
         </section>
       ))}
+      <p style={{ ...tiny, marginTop: 18 }}>
+        {APP_VERSION}
+        {" · "}
+        <a href={FEEDBACK_MAIL} style={{ color: "#fbbf24" }}>
+          Send feedback
+        </a>
+        {" · "}
+        <button type="button" onClick={() => onNavigate("/more")} style={{ ...textBtn, fontSize: "0.75rem" }}>
+          About this beta
+        </button>
+      </p>
     </main>
   );
 }
@@ -436,15 +457,17 @@ function Stat({ label, value, icon }) {
 }
 
 function RunnerGate({ lessonId, profile, ready, onExit, onFinish, onGrade }) {
-  const lesson = course.lessons.find((item) => item.id === lessonId);
+  const found = findLesson(lessonId);
+  const lesson = found?.lesson;
+  const lessonCourse = found?.course;
   const exercises = useMemo(
-    () => (lesson ? buildExercises(lesson.phrases, course.phrases, lesson.id) : []),
-    [lesson],
+    () => (lesson && lessonCourse ? buildExercises(lesson.phrases, lessonCourse.phrases, lesson.id) : []),
+    [lesson, lessonCourse],
   );
-  if (!lesson) {
+  if (!lesson || !lessonCourse) {
     return (
       <main data-screen="lesson" style={screen}>
-        <p>That lesson is not in the Tagalog course.</p>
+        <p>That lesson is not in this course.</p>
         <button type="button" style={primaryBtn} onClick={onExit}>
           Back to the course
         </button>
@@ -458,7 +481,7 @@ function RunnerGate({ lessonId, profile, ready, onExit, onFinish, onGrade }) {
       </main>
     );
   }
-  const unlocked = isLessonUnlocked(lesson, profile.completedLessons);
+  const unlocked = isLessonUnlocked(lesson, profile.languages[lesson.lang].completedLessons, lessonCourse.lessons);
   if (!unlocked) {
     return (
       <main data-screen="lesson" style={screen}>
@@ -471,8 +494,9 @@ function RunnerGate({ lessonId, profile, ready, onExit, onFinish, onGrade }) {
   }
   return (
     <LessonRunner
+      lang={lesson.lang}
       title={lesson.unitTitle}
-      subtitle={lesson.parts > 1 ? `Lesson ${lesson.part} of ${lesson.parts}` : "Lesson 1"}
+      subtitle={`${APP_LANGUAGES.find((item) => item.id === lesson.lang).name} · ${lesson.parts > 1 ? `Lesson ${lesson.part} of ${lesson.parts}` : "Lesson 1"}`}
       exercises={exercises}
       onExit={onExit}
       onFinish={(events, elapsedMin) => onFinish(events, elapsedMin, lesson)}
@@ -481,7 +505,7 @@ function RunnerGate({ lessonId, profile, ready, onExit, onFinish, onGrade }) {
   );
 }
 
-function ReviewGate({ due, ready, today, onExit, onFinish, onGrade }) {
+function ReviewGate({ due, ready, today, course, onExit, onFinish, onGrade }) {
   if (!ready) {
     return (
       <main data-screen="review" style={screen}>
@@ -489,16 +513,16 @@ function ReviewGate({ due, ready, today, onExit, onFinish, onGrade }) {
       </main>
     );
   }
-  return <ReviewSession due={due} today={today} onExit={onExit} onFinish={onFinish} onGrade={onGrade} />;
+  return <ReviewSession due={due} today={today} course={course} onExit={onExit} onFinish={onFinish} onGrade={onGrade} />;
 }
 
-function ReviewSession({ due, today, onExit, onFinish, onGrade }) {
+function ReviewSession({ due, today, course, onExit, onFinish, onGrade }) {
   const [pack] = useState(() => {
     const phrases = due.length ? pickReviewPhrases(due, today) : [];
     return {
       phrases,
       exercises: phrases.length
-        ? buildExercises(phrases, course.phrases, `review:${today}:${phrases.map((phrase) => phrase.id).join(",")}`)
+        ? buildExercises(phrases, course.phrases, `review:${course.lang}:${today}:${phrases.map((phrase) => phrase.id).join(",")}`)
         : [],
     };
   });
@@ -532,7 +556,7 @@ function ReviewSession({ due, today, onExit, onFinish, onGrade }) {
   );
 }
 
-function LessonRunner({ title, subtitle, exercises, onExit, onFinish, onGrade }) {
+function LessonRunner({ lang, title, subtitle, exercises, onExit, onFinish, onGrade }) {
   const [index, setIndex] = useState(0);
   const eventsRef = useRef([]);
   const started = useRef(0);
@@ -571,7 +595,7 @@ function LessonRunner({ title, subtitle, exercises, onExit, onFinish, onGrade })
   }
 
   return (
-    <main data-screen="lesson" style={{ ...screen, paddingBottom: 24 }}>
+    <main data-screen="lesson" data-lang={lang} style={{ ...screen, paddingBottom: 24 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <button type="button" onClick={leave} style={iconBtn} aria-label="Back to course">
           ←
@@ -619,7 +643,7 @@ function ChoiceExercise({ exercise, onResult }) {
       {exercise.type === "read-phrase" ? (
         <div style={promptCard}>{exercise.prompt}</div>
       ) : (
-        <button type="button" data-testid="play-audio" onClick={() => playFile(phrase.audio)} style={playBtn} aria-label="Play the phrase">
+        <button type="button" data-testid="play-audio" onClick={() => playFile(phrase.audio)} style={playBtn} aria-label={`Play audio: ${phrase.text}`}>
           ▶
         </button>
       )}
@@ -789,7 +813,7 @@ function FlashExercise({ exercise, onResult }) {
         </div>
         {revealed && <div style={{ marginTop: 8, color: "#94a3b8" }}>{phrase.english}</div>}
       </div>
-      <button type="button" data-testid="play-audio" aria-label="Play the phrase" onClick={() => playFile(phrase.audio)} style={{ ...secondaryBtn, marginBottom: 10 }}>
+      <button type="button" data-testid="play-audio" aria-label={`Play audio: ${phrase.text}`} onClick={() => playFile(phrase.audio)} style={{ ...secondaryBtn, marginBottom: 10 }}>
         Play audio
       </button>
       {!revealed ? (
@@ -818,7 +842,7 @@ function FlashExercise({ exercise, onResult }) {
   );
 }
 
-function Phrasebook({ favourites, onToggle }) {
+function Phrasebook({ course, favourites, onToggle }) {
   const [query, setQuery] = useState("");
   const [onlyStars, setOnlyStars] = useState(false);
   const needle = query.trim().toLowerCase();
@@ -831,12 +855,14 @@ function Phrasebook({ favourites, onToggle }) {
   return (
     <main data-screen="phrasebook" style={screen}>
       <h1 style={h1}>Phrasebook</h1>
-      <p style={{ ...mutedText, marginTop: 0 }}>{course.phrases.length} Tagalog phrases</p>
+      <p style={{ ...mutedText, marginTop: 0 }}>
+        {course.phrases.length} {APP_LANGUAGES.find((item) => item.id === course.lang).name} phrases
+      </p>
       <input
         data-testid="phrasebook-search"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        placeholder="Search phrases in English or Tagalog"
+        placeholder="Search phrases in English or this language"
         aria-label="Search phrases"
         style={searchInput}
       />
@@ -849,7 +875,7 @@ function Phrasebook({ favourites, onToggle }) {
           const starred = favourites.includes(phrase.id);
           return (
             <li key={phrase.id} style={phraseRow}>
-              <button type="button" aria-label={`Play ${phrase.text}`} onClick={() => playFile(phrase.audio)} style={speakBtn}>
+              <button type="button" aria-label={`Play audio: ${phrase.text}`} onClick={() => playFile(phrase.audio)} style={speakBtn}>
                 ▶
               </button>
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -859,7 +885,7 @@ function Phrasebook({ favourites, onToggle }) {
                 <div style={tiny}>{phrase.english}</div>
                 <div style={tiny}>
                   {phrase.unitTitle}
-                  {phrase.formal ? " · Formal (po)" : ""}
+                  {phrase.variant ? ` · ${phrase.variant}` : ""}
                 </div>
               </div>
               <button
@@ -867,7 +893,7 @@ function Phrasebook({ favourites, onToggle }) {
                 aria-pressed={starred}
                 aria-label={starred ? "Remove from favourites" : "Add to favourites"}
                 onClick={() => onToggle(phrase.id)}
-                style={{ ...iconBtn, color: starred ? "#fbbf24" : "#64748b" }}
+                style={{ ...iconBtn, color: starred ? "#fbbf24" : "#cbd5e1" }}
               >
                 {starred ? "★" : "☆"}
               </button>
@@ -879,7 +905,7 @@ function Phrasebook({ favourites, onToggle }) {
   );
 }
 
-function MoreScreen({ profile, minutes, onGoal, onImported }) {
+function MoreScreen({ profile, langProfile, course, minutes, onGoal, onImported }) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const fileRef = useRef(null);
@@ -915,10 +941,22 @@ function MoreScreen({ profile, minutes, onGoal, onImported }) {
 
   return (
     <main data-screen="more" style={screen}>
-      <h1 style={h1}>Your progress</h1>
-      <p style={mutedText}>Saved on this device. No account.</p>
+      <h1 style={h1}>About this beta</h1>
+      <p style={kicker}>{APP_VERSION}</p>
       <p style={mutedText}>
-        {formatMin(minutes)} / {profile.dailyGoalMin} min today · {profile.xp} XP · {profile.streak} day streak
+        This is an early practice app for Tagalog, Cebuano, and Ilonggo. Every phrase and recording is already on the talkaPH site. Nothing here is generated speech. Progress, XP, streaks, and review stay on this device, separately for each language. There is no account.
+      </p>
+      <p style={mutedText}>
+        On iPhone, open this page in Safari, tap Share, then Add to Home Screen. The icon opens talkaPH full screen.
+      </p>
+      <p>
+        <a href={FEEDBACK_MAIL} style={{ color: "#fbbf24", fontWeight: 800 }}>
+          Send feedback
+        </a>
+      </p>
+      <h2 style={{ ...h2, marginTop: 8 }}>Your progress</h2>
+      <p style={mutedText}>
+        {formatMin(minutes)} / {profile.dailyGoalMin} min today · {langProfile.xp} XP · {langProfile.streak} day streak in {APP_LANGUAGES.find((item) => item.id === course.lang).name}
       </p>
       <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
         {[5, 10, 15].map((option) => (
@@ -944,17 +982,17 @@ function MoreScreen({ profile, minutes, onGoal, onImported }) {
       </div>
       {message && <p style={{ color: "#86efac" }}>{message}</p>}
       {error && <p style={errorText}>{error}</p>}
-      <p style={mutedText}>Review uses a Leitner box: daily, 2 days, 4 days, weekly, then mastered.</p>
+      <p style={mutedText}>Review uses a Leitner box: daily, 2 days, 4 days, weekly, then mastered. Each language has its own boxes.</p>
       <p>
-        <Link href="/learn/tagalog" style={{ color: "#fbbf24" }}>
-          Open the Tagalog phrase list
+        <Link href={`/learn/${course.lang}`} style={{ color: "#fbbf24" }}>
+          Open the {APP_LANGUAGES.find((item) => item.id === course.lang).name} phrase list
         </Link>
       </p>
     </main>
   );
 }
 
-function CompleteScreen({ result, profile, minutes, onMap, onReview, dueCount }) {
+function CompleteScreen({ result, profile, langProfile, minutes, onMap, onReview, dueCount }) {
   const goal = profile.dailyGoalMin;
   return (
     <main data-screen="complete" style={{ ...screen, textAlign: "center" }}>
@@ -976,7 +1014,7 @@ function CompleteScreen({ result, profile, minutes, onMap, onReview, dueCount })
         </div>
         <div style={goalCard}>
           <div style={tiny}>Streak</div>
-          <div style={bigStat}>{profile.streak}</div>
+          <div style={bigStat}>{langProfile.streak}</div>
         </div>
         <div style={goalCard}>
           <div style={tiny}>Today</div>
@@ -1035,13 +1073,12 @@ const stat = { background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255
 const goalCard = { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 10, display: "grid", gap: 8, marginBottom: 8 };
 const track = { height: 8, borderRadius: 999, background: "rgba(255,255,255,0.08)", overflow: "hidden" };
 const fill = { height: "100%", background: "#fbbf24", borderRadius: 999 };
-const chip = { borderRadius: 999, border: "1px solid rgba(255,255,255,0.16)", background: "transparent", color: "#e2e8f0", padding: "8px 12px", fontWeight: 700, minHeight: 40 };
+const chip = { borderRadius: 999, border: "1px solid rgba(255,255,255,0.16)", background: "transparent", color: "#e2e8f0", padding: "8px 12px", fontWeight: 700, minHeight: 44 };
 const chipOn = { background: "#fbbf24", color: "#0f172a", borderColor: "#fbbf24" };
 const langCard = { border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.05)", color: "#e2e8f0", borderRadius: 14, padding: "8px 12px", display: "grid", gap: 2 };
-const soonBadge = { color: "#fbbf24", fontSize: "0.75rem", fontWeight: 800 };
 const primaryBtn = { width: "100%", minHeight: 52, border: 0, borderRadius: 999, background: "#fbbf24", color: "#0f172a", fontWeight: 800, fontSize: "1rem", cursor: "pointer" };
 const secondaryBtn = { width: "100%", minHeight: 48, borderRadius: 999, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.06)", color: "#fff", fontWeight: 700, cursor: "pointer" };
-const textBtn = { background: "none", border: 0, color: "#94a3b8", fontWeight: 700, padding: 0, cursor: "pointer" };
+const textBtn = { background: "none", border: 0, color: "#cbd5e1", fontWeight: 700, padding: "10px 0", minHeight: 44, cursor: "pointer" };
 const iconBtn = { width: 44, height: 44, borderRadius: 999, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.06)", color: "#fff", fontWeight: 800, cursor: "pointer" };
 const reviewRow = { width: "100%", marginTop: 10, padding: "12px 14px", borderRadius: 16, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "#fff", display: "flex", justifyContent: "space-between", alignItems: "center", textAlign: "left", cursor: "pointer" };
 const pill = { minWidth: 28, height: 28, borderRadius: 999, background: "#fbbf24", color: "#0f172a", fontWeight: 800, display: "inline-flex", alignItems: "center", justifyContent: "center" };
@@ -1065,14 +1102,12 @@ const matchDone = { borderColor: "#86efac", background: "rgba(134,239,172,0.16)"
 const searchInput = { width: "100%", boxSizing: "border-box", borderRadius: 999, border: "1px solid rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.07)", color: "#fff", padding: "12px 16px", fontSize: "1rem" };
 const listReset = { listStyle: "none", margin: 0, padding: 0, display: "grid", gap: 8 };
 const phraseRow = { display: "flex", gap: 10, alignItems: "center", padding: "8px 4px", borderBottom: "1px solid rgba(255,255,255,0.06)" };
-const speakBtn = { width: 40, height: 40, borderRadius: "50%", border: "1px solid rgba(251,191,36,0.35)", background: "rgba(251,191,36,0.15)", color: "#fbbf24", cursor: "pointer", flexShrink: 0 };
+const speakBtn = { width: 44, height: 44, borderRadius: "50%", border: "1px solid rgba(251,191,36,0.35)", background: "rgba(251,191,36,0.15)", color: "#fbbf24", cursor: "pointer", flexShrink: 0 };
 const completeGrid = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, textAlign: "left", margin: "12px 0 16px" };
 const bigStat = { fontSize: "1.6rem", fontWeight: 900 };
 const leitnerList = { display: "grid", gap: 6, paddingLeft: 18, color: "#e2e8f0" };
-const modalBackdrop = { position: "fixed", inset: 0, background: "rgba(2,6,23,0.72)", display: "grid", placeItems: "center", padding: 20, zIndex: 20 };
-const modalCard = { width: "min(100%, 400px)", background: "#0f172a", border: "1px solid rgba(251,191,36,0.35)", borderRadius: 20, padding: 20 };
 const nav = { position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "min(100%, 480px)", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 4, padding: "8px 8px calc(8px + env(safe-area-inset-bottom))", background: "rgba(15,23,42,0.94)", borderTop: "1px solid rgba(255,255,255,0.08)", zIndex: 10 };
-const navBtn = { minHeight: 44, border: 0, borderRadius: 12, background: "transparent", color: "#94a3b8", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer" };
+const navBtn = { minHeight: 44, border: 0, borderRadius: 12, background: "transparent", color: "#cbd5e1", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer" };
 const navOn = { color: "#0f172a", background: "#fbbf24" };
 const css = `
 .practice-app button:focus-visible, .practice-app a:focus-visible, .practice-app input:focus-visible {

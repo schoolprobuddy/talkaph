@@ -269,23 +269,30 @@ echo "INFO /about.html -> ${html_redir:-no redirect} (Cloudflare static assets: 
 index_redir=$(curl -s -D - -o /dev/null "$BASE/index.html" | tr -d '\r' | awk 'BEGIN{c=""} /^HTTP/{c=$2} tolower($1)=="location:"{loc=$2} END{print c, loc}')
 echo "INFO /index.html -> ${index_redir:-no redirect} (Cloudflare static assets: 307 /; Vercel today: 404)"
 
-# Practice app: Tagalog PWA shell at /app. noindex, and not an SEO URL.
+# Practice app: noindex PWA for Tagalog, Cebuano, and Ilonggo.
 check /app 200 text/html
+check /manifest.webmanifest 200 manifest
 check /app/manifest.webmanifest 200 manifest
 check /sw.js 200 javascript
 check /android-chrome-192x192.png 200 image/png
 check /android-chrome-512x512.png 200 image/png
+check /maskable-icon-192.png 200 image/png
+check /maskable-icon-512.png 200 image/png
 
 app_html=$(curl -s "$BASE/app")
 for bit in \
-  "/app/manifest.webmanifest" \
+  "/manifest.webmanifest" \
   "apple-mobile-web-app-capable" \
+  "apple-mobile-web-app-status-bar-style" \
   "apple-touch-icon" \
+  "theme-color" \
   "noindex" \
-  "Practice Tagalog" \
-  "Coming soon" \
+  "0.2.0-beta" \
+  "Send feedback" \
+  "hello@talkaph.com" \
   "Download Tagalog for offline" \
   "Phrasebook" \
+  "Tagalog" \
   "Cebuano" \
   "Ilonggo"
 do
@@ -306,7 +313,15 @@ else
   pass=$((pass+1))
 fi
 
-man=$(curl -s "$BASE/app/manifest.webmanifest")
+man=$(curl -s "$BASE/manifest.webmanifest")
+appman=$(curl -s "$BASE/app/manifest.webmanifest")
+if [ "$man" = "$appman" ]; then
+  echo "PASS /manifest.webmanifest matches /app/manifest.webmanifest"
+  pass=$((pass+1))
+else
+  echo "FAIL manifest copies differ"
+  fail=$((fail+1))
+fi
 if printf '%s' "$man" | node -e '
   let raw = "";
   process.stdin.on("data", (chunk) => { raw += chunk; });
@@ -318,24 +333,25 @@ if printf '%s' "$man" | node -e '
       && manifest.scope === "/app"
       && manifest.start_url === "/app"
       && manifest.display === "standalone"
-      && icons.some((icon) => String(icon.sizes || "").includes("192") && String(icon.src || "").includes("android-chrome-192x192.png"))
-      && icons.some((icon) => String(icon.sizes || "").includes("512") && String(icon.src || "").includes("android-chrome-512x512.png"));
+      && icons.some((icon) => String(icon.sizes || "").includes("192") && String(icon.src || "").includes("android-chrome-192x192.png") && String(icon.purpose || "any").includes("any"))
+      && icons.some((icon) => String(icon.sizes || "").includes("512") && String(icon.src || "").includes("android-chrome-512x512.png"))
+      && icons.some((icon) => String(icon.purpose || "").includes("maskable") && String(icon.sizes || "").includes("512"));
     process.exit(ok ? 0 : 1);
   });
 '; then
-  echo "PASS /app manifest scope, start_url, display, icons"
+  echo "PASS manifest scope, start_url, display, any and maskable icons"
   pass=$((pass+1))
 else
-  echo "FAIL /app manifest JSON"
+  echo "FAIL manifest JSON"
   fail=$((fail+1))
 fi
 
 sw=$(curl -s "$BASE/sw.js")
-if [[ "$sw" == *'addEventListener("fetch"'* && "$sw" == *"caches"* && "$sw" == *".mp3"* ]]; then
-  echo "PASS /sw.js fetch handler caches audio"
+if [[ "$sw" == *'addEventListener("fetch"'* && "$sw" == *"caches"* && "$sw" == *".mp3"* && "$sw" == *"talkaph-app-shell-v2"* && "$sw" == *"talkaph-audio-v2"* ]]; then
+  echo "PASS /sw.js fetch handler caches audio with versioned caches"
   pass=$((pass+1))
 else
-  echo "FAIL /sw.js is missing the offline fetch handler"
+  echo "FAIL /sw.js is missing the versioned offline fetch handler"
   fail=$((fail+1))
 fi
 

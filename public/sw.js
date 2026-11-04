@@ -1,7 +1,9 @@
-/* talkaPH practice app. Scope is the whole origin so the shell at /app
-   (no trailing slash) can be controlled. Requests outside the app are ignored. */
-const SHELL_CACHE = "talkaph-app-shell-v1";
-const AUDIO_CACHE = "talkaph-tagalog-audio-v1";
+/* talkaPH practice app 0.2.0-beta.
+   Scope is the whole origin so the shell at /app can be controlled.
+   Requests outside the app are ignored. Cache names are versioned so an
+   update drops the previous shell and audio caches instead of serving them. */
+const SHELL_CACHE = "talkaph-app-shell-v2";
+const AUDIO_CACHE = "talkaph-audio-v2";
 
 function isAudio(path) {
   return path.endsWith(".mp3");
@@ -13,9 +15,11 @@ function isAppPath(path) {
     path === "/app/" ||
     path === "/app.txt" ||
     path.startsWith("/app/") ||
+    path === "/manifest.webmanifest" ||
     path === "/sw.js" ||
     path === "/apple-touch-icon.png" ||
     path.startsWith("/android-chrome-") ||
+    path.startsWith("/maskable-icon-") ||
     path === "/favicon.ico" ||
     path.startsWith("/favicon-") ||
     path.startsWith("/_next/")
@@ -31,11 +35,14 @@ async function cacheShell() {
   headers.delete("set-cookie");
   await cache.put("/app", new Response(await response.blob(), { status: 200, headers }));
   const urls = new Set([
+    "/manifest.webmanifest",
     "/app/manifest.webmanifest",
     "/sw.js",
     "/apple-touch-icon.png",
     "/android-chrome-192x192.png",
     "/android-chrome-512x512.png",
+    "/maskable-icon-192.png",
+    "/maskable-icon-512.png",
     "/favicon.ico",
   ]);
   for (const match of html.matchAll(/(?:src|href)=["']([^"']+)["']/g)) {
@@ -49,7 +56,7 @@ async function cacheShell() {
   await Promise.all(
     [...urls].map(async (url) => {
       try {
-        const asset = await fetch(url);
+        const asset = await fetch(url, { cache: "reload" });
         if (asset.ok) await cache.put(url, asset);
       } catch {
         // A missing optional file should not block install.
@@ -91,7 +98,6 @@ async function fromCache(cacheName, key) {
   const cache = await caches.open(cacheName);
   const hit = await cache.match(key);
   if (hit) return hit;
-  // Full file, not a Range response, so a later offline play is the whole clip.
   const response = await fetch(key);
   if (response.status === 200 && !response.redirected) {
     await cache.put(key, response.clone());

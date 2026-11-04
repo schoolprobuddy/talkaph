@@ -2,13 +2,13 @@ import { pageMetadata } from "../../lib/seo";
 
 export const metadata = {
   ...pageMetadata({
-    title: "Practice Tagalog",
+    title: "Practice",
     description:
-      "Practice Tagalog phrases with native audio. Lessons, spaced review, and a phrasebook saved on this device.",
+      "Practice Tagalog, Cebuano, and Ilonggo with native audio. Lessons, spaced review, and a phrasebook saved on this device.",
     path: "/app",
     noIndex: true,
   }),
-  manifest: "/app/manifest.webmanifest",
+  manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     title: "talkaPH",
